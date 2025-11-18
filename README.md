@@ -266,18 +266,66 @@ Future Enhancements
 
 Production Deployment
 
-For production deployment:
+Two deployment options are available:
 
-1. Use a production WSGI server (e.g., Gunicorn):
+OPTION 1: Deploy to Render.com (RECOMMENDED)
+============================================
+Render offers free tier hosting for Flask applications. Perfect for client demos and production.
+
+Quick Start (10 minutes):
+1. Read: RENDER_DEPLOYMENT.md
+2. Sign up at https://render.com (use GitHub)
+3. Follow step-by-step guide
+4. Share live URL with clients
+
+Benefits:
+✓ Free tier available
+✓ Auto-deploy on GitHub push
+✓ Custom domains supported
+✓ Always-on (no cold starts on paid tier)
+✓ Full database support
+✓ Easy scaling
+
+Your app will be live at:
+https://bontez-suppliers.onrender.com
+
+OPTION 2: Deploy to Alternative Platforms
+==========================================
+Other free/low-cost options:
+
+- Fly.io: Free tier with some limitations
+- Railway: Simple deployment, pay-as-you-go
+- Replit: Quick prototyping
+
+See: DEPLOYMENT_GUIDE.md for detailed instructions
+
+OPTION 3: Self-Hosted Deployment
+================================
+For advanced users:
+
+1. Use a production WSGI server (Gunicorn):
    pip install gunicorn
    gunicorn -w 4 -b 0.0.0.0:8000 run:app
 
 2. Use a production database (PostgreSQL recommended):
    Update SQLALCHEMY_DATABASE_URI in app/__init__.py
+   PostgreSQL is more reliable than SQLite
 
 3. Set up proper security:
-   - HTTPS/SSL certificates
-   - CSRF protection
+   - HTTPS/SSL certificates (Let's Encrypt)
+   - CSRF protection (Flask-WTF)
+   - Rate limiting
+   - Input validation
+   - Secure headers
+
+4. Setup reverse proxy (Nginx recommended):
+   Route traffic to Gunicorn server
+
+5. Monitor and maintain:
+   - Log file monitoring
+   - Backup database regularly
+   - Update dependencies
+   - Security patches
    - Input validation and sanitization
    - Rate limiting
 
