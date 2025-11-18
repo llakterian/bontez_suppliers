@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+
+{% block title %}Record Accessory Sales - Bontez Suppliers{% endblock %}
+
+{% block content %}
+<div class="container form-container">
+    <div class="header">
+        <h1>Record Daily Accessory Sales</h1>
+        <p class="subtitle">Enter sales for each accessory type</p>
+    </div>
+
+    <form method="POST" class="form">
+        <!-- Grill Section -->
+        <fieldset class="form-section">
+            <legend>Grill - Ksh 350</legend>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="grill_quantity">Quantity Sold</label>
+                    <input type="number" id="grill_quantity" name="grill_quantity" min="0" value="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="grill_total">Total Amount (Ksh)</label>
+                    <input type="number" id="grill_total" name="grill_total" step="0.01" min="0" value="0" required>
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- Burner Section -->
+        <fieldset class="form-section">
+            <legend>Burners (By Price)</legend>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="burner_300_quantity">Ksh 300 - Quantity</label>
+                    <input type="number" id="burner_300_quantity" name="burner_300_quantity" min="0" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="burner_300_total">Ksh 300 - Total</label>
+                    <input type="number" id="burner_300_total" name="burner_300_total" step="0.01" min="0" value="0">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="burner_350_quantity">Ksh 350 - Quantity</label>
+                    <input type="number" id="burner_350_quantity" name="burner_350_quantity" min="0" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="burner_350_total">Ksh 350 - Total</label>
+                    <input type="number" id="burner_350_total" name="burner_350_total" step="0.01" min="0" value="0">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="burner_450_quantity">Ksh 450 - Quantity</label>
+                    <input type="number" id="burner_450_quantity" name="burner_450_quantity" min="0" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="burner_450_total">Ksh 450 - Total</label>
+                    <input type="number" id="burner_450_total" name="burner_450_total" step="0.01" min="0" value="0">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="burner_600_quantity">Ksh 600 - Quantity</label>
+                    <input type="number" id="burner_600_quantity" name="burner_600_quantity" min="0" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="burner_600_total">Ksh 600 - Total</label>
+                    <input type="number" id="burner_600_total" name="burner_600_total" step="0.01" min="0" value="0">
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- Regulator Section -->
+        <fieldset class="form-section">
+            <legend>Regulators (By Cylinder Size)</legend>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="regulator_6kg_quantity">6Kg - Ksh 500 - Quantity</label>
+                    <input type="number" id="regulator_6kg_quantity" name="regulator_6kg_quantity" min="0" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="regulator_6kg_total">6Kg - Ksh 500 - Total</label>
+                    <input type="number" id="regulator_6kg_total" name="regulator_6kg_total" step="0.01" min="0" value="0">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="regulator_13kg_quantity">13Kg - Ksh 700 - Quantity</label>
+                    <input type="number" id="regulator_13kg_quantity" name="regulator_13kg_quantity" min="0" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="regulator_13kg_total">13Kg - Ksh 700 - Total</label>
+                    <input type="number" id="regulator_13kg_total" name="regulator_13kg_total" step="0.01" min="0" value="0">
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- Hose Pipe Section -->
+        <fieldset class="form-section">
+            <legend>Hose Pipe 1.5M - Ksh 300</legend>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="hose_quantity">Quantity Sold</label>
+                    <input type="number" id="hose_quantity" name="hose_quantity" min="0" value="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="hose_total">Total Amount (Ksh)</label>
+                    <input type="number" id="hose_total" name="hose_total" step="0.01" min="0" value="0" required>
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- Notes -->
+        <fieldset class="form-section">
+            <legend>Additional Notes</legend>
+            <div class="form-group">
+                <label for="notes">Notes (Optional)</label>
+                <textarea id="notes" name="notes" rows="3" placeholder="Any additional notes about today's sales..."></textarea>
+            </div>
+        </fieldset>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-lg">Save Daily Sales</button>
+            <a href="{{ url_for('accessories.list_accessories') }}" class="btn btn-secondary btn-lg">Cancel</a>
+        </div>
+    </form>
+</div>
+
+<style>
+    .form-section {
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        padding: 20px;
+        margin: 20px 0;
+        background-color: #f9f9f9;
+    }
+
+    .form-section legend {
+        font-weight: bold;
+        color: #0066cc;
+        font-size: 16px;
+        padding: 0 10px;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin: 15px 0;
+    }
+
+    @media (max-width: 768px) {
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}

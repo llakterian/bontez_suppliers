@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Accessories Sales - Bontez Suppliers{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="header">
+        <h1>Daily Accessories Sales</h1>
+        <div class="header-actions">
+            <a href="{{ url_for('accessories.today_accessories') }}" class="btn btn-primary">Today's Entry</a>
+            <a href="{{ url_for('accessories.create_accessories') }}" class="btn btn-success">New Entry</a>
+            <a href="{{ url_for('accessories.accessories_report') }}" class="btn btn-info">Report</a>
+        </div>
+    </div>
+
+    <!-- Stats Summary -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-value">{{ sales.total }}</div>
+            <div class="stat-label">Total Entries</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">Ksh {{ "%.2f"|format(sales.items|map(attribute='get_daily_total')|sum) }}</div>
+            <div class="stat-label">Total Revenue</div>
+        </div>
+    </div>
+
+    <!-- Accessories Sales Table -->
+    <div class="table-wrapper">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Grill</th>
+                    <th>Burners</th>
+                    <th>Regulators</th>
+                    <th>Hose Pipes</th>
+                    <th>Daily Total</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sale in sales.items %}
+                <tr>
+                    <td>{{ sale.sale_date.strftime('%d %b %Y') }}</td>
+                    <td>
+                        <small>{{ sale.grill_quantity }} × Ksh 350</small><br>
+                        Ksh {{ "%.2f"|format(sale.grill_total) }}
+                    </td>
+                    <td>
+                        <small>Total: {{ sale.burner_300_quantity + sale.burner_350_quantity + sale.burner_450_quantity + sale.burner_600_quantity }}</small><br>
+                        Ksh {{ "%.2f"|format(sale.burner_300_total + sale.burner_350_total + sale.burner_450_total + sale.burner_600_total) }}
+                    </td>
+                    <td>
+                        <small>6Kg: {{ sale.regulator_6kg_quantity }}, 13Kg: {{ sale.regulator_13kg_quantity }}</small><br>
+                        Ksh {{ "%.2f"|format(sale.regulator_6kg_total + sale.regulator_13kg_total) }}
+                    </td>
+                    <td>
+                        <small>{{ sale.hose_quantity }} × Ksh 300</small><br>
+                        Ksh {{ "%.2f"|format(sale.hose_total) }}
+                    </td>
+                    <td>
+                        <strong>Ksh {{ "%.2f"|format(sale.get_daily_total()) }}</strong>
+                    </td>
+                    <td>
+                        <a href="{{ url_for('accessories.view_accessories', sale_id=sale.id) }}" class="btn btn-sm btn-info">View</a>
+                        <a href="{{ url_for('accessories.edit_accessories', sale_id=sale.id) }}" class="btn btn-sm btn-warning">Edit</a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="7" class="text-center">No accessory sales recorded yet</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    {% if sales.pages > 1 %}
+    <div class="pagination">
+        {% if sales.has_prev %}
+        <a href="{{ url_for('accessories.list_accessories', page=sales.prev_num) }}" class="btn btn-sm">Previous</a>
+        {% endif %}
+        <span>Page {{ sales.page }} of {{ sales.pages }}</span>
+        {% if sales.has_next %}
+        <a href="{{ url_for('accessories.list_accessories', page=sales.next_num) }}" class="btn btn-sm">Next</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

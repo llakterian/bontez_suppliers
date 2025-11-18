@@ -123,3 +123,65 @@ class Installment(db.Model):
     
     def __repr__(self):
         return f'<Installment {self.id}>'
+
+
+class AccessorySale(db.Model):
+    """Represents daily accessory sales tracking."""
+    __tablename__ = 'accessory_sales'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    
+    # Grill sales
+    grill_quantity = db.Column(db.Integer, default=0)
+    grill_total = db.Column(db.Float, default=0.0)
+    
+    # Burner sales (by price variants)
+    burner_300_quantity = db.Column(db.Integer, default=0)
+    burner_300_total = db.Column(db.Float, default=0.0)
+    
+    burner_350_quantity = db.Column(db.Integer, default=0)
+    burner_350_total = db.Column(db.Float, default=0.0)
+    
+    burner_450_quantity = db.Column(db.Integer, default=0)
+    burner_450_total = db.Column(db.Float, default=0.0)
+    
+    burner_600_quantity = db.Column(db.Integer, default=0)
+    burner_600_total = db.Column(db.Float, default=0.0)
+    
+    # Regulator sales (by cylinder size)
+    regulator_6kg_quantity = db.Column(db.Integer, default=0)
+    regulator_6kg_total = db.Column(db.Float, default=0.0)
+    
+    regulator_13kg_quantity = db.Column(db.Integer, default=0)
+    regulator_13kg_total = db.Column(db.Float, default=0.0)
+    
+    # Hose Pipe sales
+    hose_quantity = db.Column(db.Integer, default=0)
+    hose_total = db.Column(db.Float, default=0.0)
+    
+    # Meta fields
+    sale_date = db.Column(db.DateTime, default=datetime.utcnow, unique=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    notes = db.Column(db.String(255))
+    
+    def __repr__(self):
+        return f'<AccessorySale {self.sale_date.strftime("%Y-%m-%d") if self.sale_date else "N/A"}>'
+    
+    def get_daily_total(self):
+        """Calculate total for the day."""
+        total = (self.grill_total + 
+                self.burner_300_total + self.burner_350_total + 
+                self.burner_450_total + self.burner_600_total +
+                self.regulator_6kg_total + self.regulator_13kg_total +
+                self.hose_total)
+        return total
+    
+    def get_total_quantity(self):
+        """Calculate total quantity sold."""
+        quantity = (self.grill_quantity +
+                   self.burner_300_quantity + self.burner_350_quantity +
+                   self.burner_450_quantity + self.burner_600_quantity +
+                   self.regulator_6kg_quantity + self.regulator_13kg_quantity +
+                   self.hose_quantity)
+        return quantity

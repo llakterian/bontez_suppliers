@@ -1,0 +1,257 @@
+{% extends "base.html" %}
+
+{% block title %}Accessory Sales Report - Bontez Suppliers{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="header">
+        <h1>Accessory Sales Report</h1>
+        <div class="header-actions">
+            <a href="{{ url_for('accessories.accessories_report', period='day') }}" class="btn {% if period == 'day' %}btn-primary{% else %}btn-secondary{% endif %}">Daily</a>
+            <a href="{{ url_for('accessories.accessories_report', period='week') }}" class="btn {% if period == 'week' %}btn-primary{% else %}btn-secondary{% endif %}">Weekly</a>
+            <a href="{{ url_for('accessories.accessories_report', period='month') }}" class="btn {% if period == 'month' %}btn-primary{% else %}btn-secondary{% endif %}">Monthly</a>
+        </div>
+    </div>
+
+    <!-- Summary Stats -->
+    {% set grill_total = totals['grill']['amount'] %}
+    {% set burner_total = totals['burner_300']['amount'] + totals['burner_350']['amount'] + totals['burner_450']['amount'] + totals['burner_600']['amount'] %}
+    {% set regulator_total = totals['regulator_6kg']['amount'] + totals['regulator_13kg']['amount'] %}
+    {% set hose_total = totals['hose']['amount'] %}
+    {% set grand_total = grill_total + burner_total + regulator_total + hose_total %}
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-value">{{ sales|length }}</div>
+            <div class="stat-label">Sales Records</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">Ksh {{ "%.2f"|format(grand_total) }}</div>
+            <div class="stat-label">Total Revenue</div>
+        </div>
+    </div>
+
+    <!-- Detailed Report -->
+    <div class="table-wrapper">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Item Type</th>
+                    <th>Specification</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                    <th>Total (Ksh)</th>
+                    <th>% of Revenue</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Grill -->
+                <tr class="category-row">
+                    <td colspan="6"><strong>Grill</strong></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Grill (Standard)</td>
+                    <td>{{ totals['grill']['qty'] }}</td>
+                    <td>Ksh 350</td>
+                    <td>Ksh {{ "%.2f"|format(totals['grill']['amount']) }}</td>
+                    <td>{{ "%.1f"|format((totals['grill']['amount'] / grand_total * 100) if grand_total > 0 else 0) }}%</td>
+                </tr>
+
+                <!-- Burners -->
+                <tr class="category-row">
+                    <td colspan="6"><strong>Burners</strong></td>
+                </tr>
+                {% if totals['burner_300']['qty'] > 0 %}
+                <tr>
+                    <td></td>
+                    <td>Burner (Ksh 300)</td>
+                    <td>{{ totals['burner_300']['qty'] }}</td>
+                    <td>Ksh 300</td>
+                    <td>Ksh {{ "%.2f"|format(totals['burner_300']['amount']) }}</td>
+                    <td>{{ "%.1f"|format((totals['burner_300']['amount'] / grand_total * 100) if grand_total > 0 else 0) }}%</td>
+                </tr>
+                {% endif %}
+
+                {% if totals['burner_350']['qty'] > 0 %}
+                <tr>
+                    <td></td>
+                    <td>Burner (Ksh 350)</td>
+                    <td>{{ totals['burner_350']['qty'] }}</td>
+                    <td>Ksh 350</td>
+                    <td>Ksh {{ "%.2f"|format(totals['burner_350']['amount']) }}</td>
+                    <td>{{ "%.1f"|format((totals['burner_350']['amount'] / grand_total * 100) if grand_total > 0 else 0) }}%</td>
+                </tr>
+                {% endif %}
+
+                {% if totals['burner_450']['qty'] > 0 %}
+                <tr>
+                    <td></td>
+                    <td>Burner (Ksh 450)</td>
+                    <td>{{ totals['burner_450']['qty'] }}</td>
+                    <td>Ksh 450</td>
+                    <td>Ksh {{ "%.2f"|format(totals['burner_450']['amount']) }}</td>
+                    <td>{{ "%.1f"|format((totals['burner_450']['amount'] / grand_total * 100) if grand_total > 0 else 0) }}%</td>
+                </tr>
+                {% endif %}
+
+                {% if totals['burner_600']['qty'] > 0 %}
+                <tr>
+                    <td></td>
+                    <td>Burner (Ksh 600)</td>
+                    <td>{{ totals['burner_600']['qty'] }}</td>
+                    <td>Ksh 600</td>
+                    <td>Ksh {{ "%.2f"|format(totals['burner_600']['amount']) }}</td>
+                    <td>{{ "%.1f"|format((totals['burner_600']['amount'] / grand_total * 100) if grand_total > 0 else 0) }}%</td>
+                </tr>
+                {% endif %}
+
+                <!-- Regulators -->
+                <tr class="category-row">
+                    <td colspan="6"><strong>Regulators</strong></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Regulator (6Kg Cylinder)</td>
+                    <td>{{ totals['regulator_6kg']['qty'] }}</td>
+                    <td>Ksh 500</td>
+                    <td>Ksh {{ "%.2f"|format(totals['regulator_6kg']['amount']) }}</td>
+                    <td>{{ "%.1f"|format((totals['regulator_6kg']['amount'] / grand_total * 100) if grand_total > 0 else 0) }}%</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Regulator (13Kg Cylinder)</td>
+                    <td>{{ totals['regulator_13kg']['qty'] }}</td>
+                    <td>Ksh 700</td>
+                    <td>Ksh {{ "%.2f"|format(totals['regulator_13kg']['amount']) }}</td>
+                    <td>{{ "%.1f"|format((totals['regulator_13kg']['amount'] / grand_total * 100) if grand_total > 0 else 0) }}%</td>
+                </tr>
+
+                <!-- Hose Pipe -->
+                <tr class="category-row">
+                    <td colspan="6"><strong>Hose Pipe</strong></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Hose Pipe (1.5M)</td>
+                    <td>{{ totals['hose']['qty'] }}</td>
+                    <td>Ksh 300</td>
+                    <td>Ksh {{ "%.2f"|format(totals['hose']['amount']) }}</td>
+                    <td>{{ "%.1f"|format((totals['hose']['amount'] / grand_total * 100) if grand_total > 0 else 0) }}%</td>
+                </tr>
+
+                <!-- Grand Total -->
+                <tr class="total-row">
+                    <td colspan="3"><strong>TOTAL</strong></td>
+                    <td></td>
+                    <td><strong>Ksh {{ "%.2f"|format(grand_total) }}</strong></td>
+                    <td><strong>100%</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Category Breakdown Chart Data -->
+    <div class="chart-section">
+        <h2>Revenue by Category</h2>
+        <div id="categoryChart" style="max-width: 100%; height: 300px;">
+            <canvas id="revenueChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<style>
+    .category-row {
+        background-color: #e8f4f8;
+        font-weight: bold;
+    }
+
+    .category-row td {
+        color: #0066cc;
+        padding: 12px;
+        border-top: 1px solid #ddd;
+    }
+
+    .total-row {
+        background-color: #d0e8f2;
+        font-weight: bold;
+    }
+
+    .total-row td {
+        padding: 12px;
+        border-top: 2px solid #0066cc;
+        color: #0066cc;
+    }
+
+    .chart-section {
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        padding: 20px;
+        margin: 20px 0;
+    }
+
+    .chart-section h2 {
+        color: #0066cc;
+        margin-top: 0;
+    }
+
+    @media (max-width: 768px) {
+        .data-table thead {
+            font-size: 12px;
+        }
+        
+        .data-table td {
+            font-size: 12px;
+            padding: 8px 5px;
+        }
+    }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+<script>
+    // Revenue by Category Chart
+    const categoryData = {
+        labels: ['Grills', 'Burners', 'Regulators', 'Hose Pipes'],
+        datasets: [{
+            label: 'Revenue (Ksh)',
+            data: [
+                {{ grill_total }},
+                {{ burner_total }},
+                {{ regulator_total }},
+                {{ hose_total }}
+            ],
+            backgroundColor: [
+                '#ff6b6b',
+                '#4ecdc4',
+                '#45b7d1',
+                '#ffa502'
+            ],
+            borderColor: [
+                '#ff5252',
+                '#2c9b8a',
+                '#0087be',
+                '#ff8c00'
+            ],
+            borderWidth: 2
+        }]
+    };
+
+    const categoryCtx = document.getElementById('revenueChart');
+    if (categoryCtx) {
+        new Chart(categoryCtx, {
+            type: 'doughnut',
+            data: categoryData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    }
+</script>
+{% endblock %}

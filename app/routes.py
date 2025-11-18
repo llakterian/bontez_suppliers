@@ -4,7 +4,7 @@ Author: Llakterian
 """
 
 from flask import Blueprint, render_template, request, jsonify, redirect, url_for, flash
-from app.models import db, Client, Supplier, Product, Sale, SaleItem, Installment
+from app.models import db, Client, Supplier, Product, Sale, SaleItem, Installment, AccessorySale
 from datetime import datetime, timedelta
 from sqlalchemy import func, extract
 
@@ -13,6 +13,7 @@ clients_bp = Blueprint('clients', __name__, url_prefix='/clients')
 suppliers_bp = Blueprint('suppliers', __name__, url_prefix='/suppliers')
 sales_bp = Blueprint('sales', __name__, url_prefix='/sales')
 reports_bp = Blueprint('reports', __name__, url_prefix='/reports')
+accessories_bp = Blueprint('accessories', __name__, url_prefix='/accessories')
 
 
 @main_bp.route('/')
@@ -290,3 +291,187 @@ def add_installment(sale_id):
     flash('Installment recorded successfully', 'success')
     
     return redirect(url_for('sales.view_sale', sale_id=sale_id))
+
+
+# ============= ACCESSORIES ROUTES =============
+
+@accessories_bp.route('/')
+def list_accessories():
+    """List daily accessory sales."""
+    page = request.args.get('page', 1, type=int)
+    sales = AccessorySale.query.order_by(AccessorySale.sale_date.desc()).paginate(page=page, per_page=20)
+    return render_template('accessories/list.html', sales=sales)
+
+
+@accessories_bp.route('/today')
+def today_accessories():
+    """Show today's accessories entry."""
+    today = datetime.utcnow().date()
+    today_start = datetime.combine(today, datetime.min.time())
+    today_end = datetime.combine(today, datetime.max.time())
+    
+    sale = AccessorySale.query.filter(
+        AccessorySale.sale_date >= today_start,
+        AccessorySale.sale_date <= today_end
+    ).first()
+    
+    if sale:
+        return redirect(url_for('accessories.edit_accessories', sale_id=sale.id))
+    
+    return redirect(url_for('accessories.create_accessories'))
+
+
+@accessories_bp.route('/create', methods=['GET', 'POST'])
+def create_accessories():
+    """Create new daily accessory sales entry."""
+    if request.method == 'POST':
+        today = datetime.utcnow().date()
+        today_start = datetime.combine(today, datetime.min.time())
+        today_end = datetime.combine(today, datetime.max.time())
+        
+        # Check if entry exists
+        existing = AccessorySale.query.filter(
+            AccessorySale.sale_date >= today_start,
+            AccessorySale.sale_date <= today_end
+        ).first()
+        
+        if existing:
+            flash('Accessory entry for today already exists', 'warning')
+            return redirect(url_for('accessories.edit_accessories', sale_id=existing.id))
+        
+        sale = AccessorySale(
+            grill_quantity=int(request.form.get('grill_quantity', 0)),
+            grill_total=float(request.form.get('grill_total', 0)),
+            
+            burner_300_quantity=int(request.form.get('burner_300_quantity', 0)),
+            burner_300_total=float(request.form.get('burner_300_total', 0)),
+            
+            burner_350_quantity=int(request.form.get('burner_350_quantity', 0)),
+            burner_350_total=float(request.form.get('burner_350_total', 0)),
+            
+            burner_450_quantity=int(request.form.get('burner_450_quantity', 0)),
+            burner_450_total=float(request.form.get('burner_450_total', 0)),
+            
+            burner_600_quantity=int(request.form.get('burner_600_quantity', 0)),
+            burner_600_total=float(request.form.get('burner_600_total', 0)),
+            
+            regulator_6kg_quantity=int(request.form.get('regulator_6kg_quantity', 0)),
+            regulator_6kg_total=float(request.form.get('regulator_6kg_total', 0)),
+            
+            regulator_13kg_quantity=int(request.form.get('regulator_13kg_quantity', 0)),
+            regulator_13kg_total=float(request.form.get('regulator_13kg_total', 0)),
+            
+            hose_quantity=int(request.form.get('hose_quantity', 0)),
+            hose_total=float(request.form.get('hose_total', 0)),
+            
+            notes=request.form.get('notes', ''),
+            sale_date=datetime.utcnow()
+        )
+        
+        db.session.add(sale)
+        db.session.commit()
+        flash('Accessory sales recorded successfully', 'success')
+        return redirect(url_for('accessories.view_accessories', sale_id=sale.id))
+    
+    return render_template('accessories/create.html')
+
+
+@accessories_bp.route('/<int:sale_id>')
+def view_accessories(sale_id):
+    """View accessory sales details."""
+    sale = AccessorySale.query.get_or_404(sale_id)
+    return render_template('accessories/view.html', sale=sale)
+
+
+@accessories_bp.route('/<int:sale_id>/edit', methods=['GET', 'POST'])
+def edit_accessories(sale_id):
+    """Edit accessory sales entry."""
+    sale = AccessorySale.query.get_or_404(sale_id)
+    
+    if request.method == 'POST':
+        sale.grill_quantity = int(request.form.get('grill_quantity', 0))
+        sale.grill_total = float(request.form.get('grill_total', 0))
+        
+        sale.burner_300_quantity = int(request.form.get('burner_300_quantity', 0))
+        sale.burner_300_total = float(request.form.get('burner_300_total', 0))
+        
+        sale.burner_350_quantity = int(request.form.get('burner_350_quantity', 0))
+        sale.burner_350_total = float(request.form.get('burner_350_total', 0))
+        
+        sale.burner_450_quantity = int(request.form.get('burner_450_quantity', 0))
+        sale.burner_450_total = float(request.form.get('burner_450_total', 0))
+        
+        sale.burner_600_quantity = int(request.form.get('burner_600_quantity', 0))
+        sale.burner_600_total = float(request.form.get('burner_600_total', 0))
+        
+        sale.regulator_6kg_quantity = int(request.form.get('regulator_6kg_quantity', 0))
+        sale.regulator_6kg_total = float(request.form.get('regulator_6kg_total', 0))
+        
+        sale.regulator_13kg_quantity = int(request.form.get('regulator_13kg_quantity', 0))
+        sale.regulator_13kg_total = float(request.form.get('regulator_13kg_total', 0))
+        
+        sale.hose_quantity = int(request.form.get('hose_quantity', 0))
+        sale.hose_total = float(request.form.get('hose_total', 0))
+        
+        sale.notes = request.form.get('notes', '')
+        sale.updated_at = datetime.utcnow()
+        
+        db.session.commit()
+        flash('Accessory sales updated successfully', 'success')
+        return redirect(url_for('accessories.view_accessories', sale_id=sale.id))
+    
+    return render_template('accessories/edit.html', sale=sale)
+
+
+@accessories_bp.route('/report')
+def accessories_report():
+    """Generate accessory sales report."""
+    period = request.args.get('period', 'week')
+    
+    if period == 'week':
+        start_date = datetime.utcnow() - timedelta(days=7)
+    elif period == 'month':
+        start_date = datetime.utcnow() - timedelta(days=30)
+    else:
+        start_date = datetime.utcnow() - timedelta(days=1)
+    
+    sales = AccessorySale.query.filter(AccessorySale.sale_date >= start_date).all()
+    
+    # Aggregate data
+    totals = {
+        'grill': {'qty': 0, 'amount': 0},
+        'burner_300': {'qty': 0, 'amount': 0},
+        'burner_350': {'qty': 0, 'amount': 0},
+        'burner_450': {'qty': 0, 'amount': 0},
+        'burner_600': {'qty': 0, 'amount': 0},
+        'regulator_6kg': {'qty': 0, 'amount': 0},
+        'regulator_13kg': {'qty': 0, 'amount': 0},
+        'hose': {'qty': 0, 'amount': 0},
+    }
+    
+    for sale in sales:
+        totals['grill']['qty'] += sale.grill_quantity
+        totals['grill']['amount'] += sale.grill_total
+        
+        totals['burner_300']['qty'] += sale.burner_300_quantity
+        totals['burner_300']['amount'] += sale.burner_300_total
+        
+        totals['burner_350']['qty'] += sale.burner_350_quantity
+        totals['burner_350']['amount'] += sale.burner_350_total
+        
+        totals['burner_450']['qty'] += sale.burner_450_quantity
+        totals['burner_450']['amount'] += sale.burner_450_total
+        
+        totals['burner_600']['qty'] += sale.burner_600_quantity
+        totals['burner_600']['amount'] += sale.burner_600_total
+        
+        totals['regulator_6kg']['qty'] += sale.regulator_6kg_quantity
+        totals['regulator_6kg']['amount'] += sale.regulator_6kg_total
+        
+        totals['regulator_13kg']['qty'] += sale.regulator_13kg_quantity
+        totals['regulator_13kg']['amount'] += sale.regulator_13kg_total
+        
+        totals['hose']['qty'] += sale.hose_quantity
+        totals['hose']['amount'] += sale.hose_total
+    
+    return render_template('accessories/report.html', totals=totals, period=period, sales=sales)

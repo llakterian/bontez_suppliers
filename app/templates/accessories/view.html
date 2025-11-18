@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+
+{% block title %}Accessory Sales Details - Bontez Suppliers{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="header">
+        <h1>Accessory Sales - {{ sale.sale_date.strftime('%d %B %Y') }}</h1>
+        <div class="header-actions">
+            <a href="{{ url_for('accessories.edit_accessories', sale_id=sale.id) }}" class="btn btn-warning">Edit</a>
+            <a href="{{ url_for('accessories.list_accessories') }}" class="btn btn-secondary">Back</a>
+        </div>
+    </div>
+
+    <!-- Summary Card -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-value">{{ sale.get_total_quantity() }}</div>
+            <div class="stat-label">Total Items Sold</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">Ksh {{ "%.2f"|format(sale.get_daily_total()) }}</div>
+            <div class="stat-label">Total Revenue</div>
+        </div>
+    </div>
+
+    <!-- Detailed Sales Breakdown -->
+    <div class="details-section">
+        <h2>Sales Breakdown</h2>
+        
+        <div class="table-wrapper">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Unit Price</th>
+                        <th>Quantity</th>
+                        <th>Total (Ksh)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Grill -->
+                    <tr>
+                        <td><strong>Grill</strong></td>
+                        <td>Ksh 350</td>
+                        <td>{{ sale.grill_quantity }}</td>
+                        <td>Ksh {{ "%.2f"|format(sale.grill_total) }}</td>
+                    </tr>
+
+                    <!-- Burners -->
+                    {% if sale.burner_300_quantity > 0 %}
+                    <tr>
+                        <td><strong>Burner</strong> (Ksh 300)</td>
+                        <td>Ksh 300</td>
+                        <td>{{ sale.burner_300_quantity }}</td>
+                        <td>Ksh {{ "%.2f"|format(sale.burner_300_total) }}</td>
+                    </tr>
+                    {% endif %}
+
+                    {% if sale.burner_350_quantity > 0 %}
+                    <tr>
+                        <td><strong>Burner</strong> (Ksh 350)</td>
+                        <td>Ksh 350</td>
+                        <td>{{ sale.burner_350_quantity }}</td>
+                        <td>Ksh {{ "%.2f"|format(sale.burner_350_total) }}</td>
+                    </tr>
+                    {% endif %}
+
+                    {% if sale.burner_450_quantity > 0 %}
+                    <tr>
+                        <td><strong>Burner</strong> (Ksh 450)</td>
+                        <td>Ksh 450</td>
+                        <td>{{ sale.burner_450_quantity }}</td>
+                        <td>Ksh {{ "%.2f"|format(sale.burner_450_total) }}</td>
+                    </tr>
+                    {% endif %}
+
+                    {% if sale.burner_600_quantity > 0 %}
+                    <tr>
+                        <td><strong>Burner</strong> (Ksh 600)</td>
+                        <td>Ksh 600</td>
+                        <td>{{ sale.burner_600_quantity }}</td>
+                        <td>Ksh {{ "%.2f"|format(sale.burner_600_total) }}</td>
+                    </tr>
+                    {% endif %}
+
+                    <!-- Regulators -->
+                    {% if sale.regulator_6kg_quantity > 0 %}
+                    <tr>
+                        <td><strong>Regulator 6Kg</strong></td>
+                        <td>Ksh 500</td>
+                        <td>{{ sale.regulator_6kg_quantity }}</td>
+                        <td>Ksh {{ "%.2f"|format(sale.regulator_6kg_total) }}</td>
+                    </tr>
+                    {% endif %}
+
+                    {% if sale.regulator_13kg_quantity > 0 %}
+                    <tr>
+                        <td><strong>Regulator 13Kg</strong></td>
+                        <td>Ksh 700</td>
+                        <td>{{ sale.regulator_13kg_quantity }}</td>
+                        <td>Ksh {{ "%.2f"|format(sale.regulator_13kg_total) }}</td>
+                    </tr>
+                    {% endif %}
+
+                    <!-- Hose Pipe -->
+                    <tr>
+                        <td><strong>Hose Pipe 1.5M</strong></td>
+                        <td>Ksh 300</td>
+                        <td>{{ sale.hose_quantity }}</td>
+                        <td>Ksh {{ "%.2f"|format(sale.hose_total) }}</td>
+                    </tr>
+
+                    <!-- Total Row -->
+                    <tr class="total-row">
+                        <td colspan="3"><strong>DAILY TOTAL</strong></td>
+                        <td><strong>Ksh {{ "%.2f"|format(sale.get_daily_total()) }}</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Notes Section -->
+    {% if sale.notes %}
+    <div class="details-section">
+        <h2>Notes</h2>
+        <p>{{ sale.notes }}</p>
+    </div>
+    {% endif %}
+
+    <!-- Metadata -->
+    <div class="details-section">
+        <h2>Record Information</h2>
+        <div class="info-grid">
+            <div class="info-item">
+                <span class="label">Recorded:</span>
+                <span class="value">{{ sale.created_at.strftime('%d %b %Y %H:%M') }}</span>
+            </div>
+            <div class="info-item">
+                <span class="label">Last Updated:</span>
+                <span class="value">{{ sale.updated_at.strftime('%d %b %Y %H:%M') }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .details-section {
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        padding: 20px;
+        margin: 20px 0;
+    }
+
+    .details-section h2 {
+        color: #0066cc;
+        margin-top: 0;
+        margin-bottom: 15px;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+
+    .info-item {
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
+        background: #f5f5f5;
+        border-radius: 4px;
+    }
+
+    .info-item .label {
+        font-weight: bold;
+        color: #666;
+        font-size: 12px;
+        text-transform: uppercase;
+    }
+
+    .info-item .value {
+        font-size: 16px;
+        color: #333;
+        margin-top: 5px;
+    }
+
+    .total-row {
+        background-color: #e8f4f8;
+        font-weight: bold;
+    }
+
+    .total-row td {
+        padding: 12px;
+        border-top: 2px solid #0066cc;
+    }
+</style>
+{% endblock %}

@@ -33,13 +33,23 @@ def seed_database():
         db.session.flush()
         
         products = [
+            # Gas Cylinders - New
             Product(name='Gas Cylinder 6Kg - New', supplier_id=suppliers[0].id, category='cylinder_6kg', price=3200, description='New 6Kg gas cylinder with gas'),
-            Product(name='Gas Cylinder 6Kg - Refill', supplier_id=suppliers[0].id, category='cylinder_6kg_refill', price=2000, description='6Kg gas cylinder refill/swap'),
-            Product(name='Gas Cylinder 12Kg - New', supplier_id=suppliers[0].id, category='cylinder_12kg', price=5500, description='New 12Kg gas cylinder with gas'),
-            Product(name='Gas Cylinder 12Kg - Refill', supplier_id=suppliers[0].id, category='cylinder_12kg_refill', price=3100, description='12Kg gas cylinder refill/swap'),
-            Product(name='Burner', category='accessory', price=750, description='Gas burner'),
-            Product(name='Grill', category='accessory', price=1000, description='Gas grill'),
-            Product(name='Pipe', category='accessory', price=400, description='Gas connection pipe'),
+            Product(name='Gas Cylinder 13Kg - New', supplier_id=suppliers[0].id, category='cylinder_13kg', price=5500, description='New 13Kg gas cylinder with gas'),
+            
+            # Gas Cylinders - Refill
+            Product(name='Gas Cylinder 6Kg - Refill', supplier_id=suppliers[0].id, category='cylinder_6kg_refill', price=1200, description='6Kg gas cylinder refill/swap'),
+            Product(name='Gas Cylinder 13Kg - Refill', supplier_id=suppliers[0].id, category='cylinder_13kg_refill', price=2600, description='13Kg gas cylinder refill/swap'),
+            
+            # Accessories
+            Product(name='Grill', category='accessory_grill', price=350, description='Gas grill'),
+            Product(name='Burner (Ksh 300)', category='accessory_burner', price=300, description='Gas burner - Standard'),
+            Product(name='Burner (Ksh 350)', category='accessory_burner', price=350, description='Gas burner - Medium'),
+            Product(name='Burner (Ksh 450)', category='accessory_burner', price=450, description='Gas burner - Large'),
+            Product(name='Burner (Ksh 600)', category='accessory_burner', price=600, description='Gas burner - Premium'),
+            Product(name='Regulator 6Kg', category='accessory_regulator', price=500, description='Gas regulator for 6Kg cylinder'),
+            Product(name='Regulator 13Kg', category='accessory_regulator', price=700, description='Gas regulator for 13Kg cylinder'),
+            Product(name='Hose Pipe 1.5M', category='accessory_pipe', price=300, description='Gas hose pipe 1.5 meters'),
         ]
         
         for product in products:
@@ -84,8 +94,8 @@ def seed_database():
                 client_id=clients[2].id,
                 supplier_id=suppliers[2].id,
                 payment_method='installment',
-                total_amount=7100,
-                amount_paid=3550,
+                total_amount=5850,
+                amount_paid=2925,
                 notes='3 installments',
                 sale_date=today - timedelta(days=5)
             ),
@@ -93,8 +103,8 @@ def seed_database():
                 client_id=clients[3].id,
                 supplier_id=suppliers[3].id,
                 payment_method='cash',
-                total_amount=2750,
-                amount_paid=2750,
+                total_amount=1850,
+                amount_paid=1850,
                 sale_date=today - timedelta(days=10)
             ),
             Sale(
@@ -102,8 +112,8 @@ def seed_database():
                 supplier_id=None,
                 payment_method='mpesa',
                 mpesa_code='DEF456GHI',
-                total_amount=8500,
-                amount_paid=8500,
+                total_amount=6600,
+                amount_paid=6600,
                 notes='Mixed suppliers',
                 sale_date=today - timedelta(days=3)
             ),
@@ -115,17 +125,26 @@ def seed_database():
         db.session.flush()
         
         sale_items = [
+            # Sale 1: 6Kg new cylinder
             SaleItem(sale_id=sales[0].id, product_id=products[0].id, quantity=1, unit_price=3200, subtotal=3200),
-            SaleItem(sale_id=sales[1].id, product_id=products[2].id, quantity=1, unit_price=5500, subtotal=5500),
-            SaleItem(sale_id=sales[2].id, product_id=products[2].id, quantity=1, unit_price=5500, subtotal=5500),
-            SaleItem(sale_id=sales[2].id, product_id=products[4].id, quantity=1, unit_price=750, subtotal=750),
-            SaleItem(sale_id=sales[3].id, product_id=products[1].id, quantity=1, unit_price=2000, subtotal=2000),
-            SaleItem(sale_id=sales[3].id, product_id=products[6].id, quantity=1, unit_price=400, subtotal=400),
-            SaleItem(sale_id=sales[3].id, product_id=products[5].id, quantity=1, unit_price=1000, subtotal=1000),
-            SaleItem(sale_id=sales[4].id, product_id=products[2].id, quantity=1, unit_price=5500, subtotal=5500),
-            SaleItem(sale_id=sales[4].id, product_id=products[4].id, quantity=1, unit_price=750, subtotal=750),
-            SaleItem(sale_id=sales[4].id, product_id=products[5].id, quantity=1, unit_price=1000, subtotal=1000),
-            SaleItem(sale_id=sales[4].id, product_id=products[6].id, quantity=1, unit_price=400, subtotal=400),
+            
+            # Sale 2: 13Kg new cylinder
+            SaleItem(sale_id=sales[1].id, product_id=products[1].id, quantity=1, unit_price=5500, subtotal=5500),
+            
+            # Sale 3: 13Kg new + Burner
+            SaleItem(sale_id=sales[2].id, product_id=products[1].id, quantity=1, unit_price=5500, subtotal=5500),
+            SaleItem(sale_id=sales[2].id, product_id=products[6].id, quantity=1, unit_price=350, subtotal=350),
+            
+            # Sale 4: 6Kg refill + Hose Pipe + Grill
+            SaleItem(sale_id=sales[3].id, product_id=products[2].id, quantity=1, unit_price=1200, subtotal=1200),
+            SaleItem(sale_id=sales[3].id, product_id=products[11].id, quantity=1, unit_price=300, subtotal=300),
+            SaleItem(sale_id=sales[3].id, product_id=products[4].id, quantity=1, unit_price=350, subtotal=350),
+            
+            # Sale 5: Mixed - 13Kg new + Burner + Grill + Hose Pipe
+            SaleItem(sale_id=sales[4].id, product_id=products[1].id, quantity=1, unit_price=5500, subtotal=5500),
+            SaleItem(sale_id=sales[4].id, product_id=products[7].id, quantity=1, unit_price=450, subtotal=450),
+            SaleItem(sale_id=sales[4].id, product_id=products[4].id, quantity=1, unit_price=350, subtotal=350),
+            SaleItem(sale_id=sales[4].id, product_id=products[11].id, quantity=1, unit_price=300, subtotal=300),
         ]
         
         for sale_item in sale_items:
@@ -134,8 +153,8 @@ def seed_database():
         db.session.flush()
         
         installments = [
-            Installment(sale_id=sales[2].id, amount=3550, due_date=today + timedelta(days=30), is_paid=True, paid_date=today - timedelta(days=2)),
-            Installment(sale_id=sales[2].id, amount=3550, due_date=today + timedelta(days=60), is_paid=False),
+            Installment(sale_id=sales[2].id, amount=2925, due_date=today + timedelta(days=30), is_paid=True, paid_date=today - timedelta(days=2)),
+            Installment(sale_id=sales[2].id, amount=2925, due_date=today + timedelta(days=60), is_paid=False),
         ]
         
         for installment in installments:

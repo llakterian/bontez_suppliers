@@ -24,11 +24,12 @@ def create_app(config=None):
     with app.app_context():
         db.create_all()
     
-    from app.routes import main_bp, clients_bp, suppliers_bp, sales_bp, reports_bp
+    from app.routes import main_bp, clients_bp, suppliers_bp, sales_bp, reports_bp, accessories_bp
     app.register_blueprint(main_bp)
     app.register_blueprint(clients_bp)
     app.register_blueprint(suppliers_bp)
     app.register_blueprint(sales_bp)
     app.register_blueprint(reports_bp)
+    app.register_blueprint(accessories_bp)
     
     return app
