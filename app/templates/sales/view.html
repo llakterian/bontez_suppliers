@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Sale #{{ sale.id }} - Bontez Suppliers{% endblock %}
+
+{% block content %}
+<h2>Sale #{{ sale.id }}</h2>
+
+<div class="sale-details">
+    <h3>Basic Information</h3>
+    <p><strong>Date:</strong> {{ sale.sale_date.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+    <p><strong>Client:</strong> <a href="{{ url_for('clients.view_client', client_id=sale.client_id) }}">{{ sale.client.name }}</a></p>
+    <p><strong>Supplier:</strong> {{ sale.supplier.name if sale.supplier else 'Mixed Gas' }}</p>
+    <p><strong>Payment Method:</strong> {{ sale.payment_method.upper() }}</p>
+    {% if sale.mpesa_code %}
+    <p><strong>Mpesa Code:</strong> {{ sale.mpesa_code }}</p>
+    {% endif %}
+    {% if sale.notes %}
+    <p><strong>Notes:</strong> {{ sale.notes }}</p>
+    {% endif %}
+</div>
+
+<h3>Items Purchased</h3>
+{% if sale.items %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in sale.items %}
+            <tr>
+                <td>{{ item.product.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>KES {{ "{:.2f}".format(item.unit_price) }}</td>
+                <td>KES {{ "{:.2f}".format(item.subtotal) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+
+<div class="sale-summary">
+    <p><strong>Total Amount:</strong> KES {{ "{:.2f}".format(sale.total_amount) }}</p>
+    <p><strong>Amount Paid:</strong> KES {{ "{:.2f}".format(sale.amount_paid) }}</p>
+    <p><strong>Remaining Balance:</strong> KES {{ "{:.2f}".format(sale.remaining_balance()) }}</p>
+</div>
+
+{% if sale.payment_method == 'installment' %}
+<h3>Installment Schedule</h3>
+{% if sale.installments %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Amount</th>
+                <th>Due Date</th>
+                <th>Paid Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for installment in sale.installments %}
+            <tr>
+                <td>KES {{ "{:.2f}".format(installment.amount) }}</td>
+                <td>{{ installment.due_date.strftime('%Y-%m-%d') }}</td>
+                <td>{{ installment.paid_date.strftime('%Y-%m-%d') if installment.paid_date else 'Not paid' }}</td>
+                <td>{{ 'Paid' if installment.is_paid else 'Pending' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+
+{% if sale.remaining_balance() > 0 %}
+<form method="POST" action="{{ url_for('sales.add_installment', sale_id=sale.id) }}" class="form">
+    <h3>Record Payment</h3>
+    <div class="form-group">
+        <label for="amount">Payment Amount</label>
+        <input type="number" id="amount" name="amount" step="0.01" max="{{ sale.remaining_balance() }}" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Record Payment</button>
+</form>
+{% endif %}
+{% endif %}
+
+<div class="actions">
+    <a href="{{ url_for('sales.list_sales') }}" class="btn btn-secondary">Back to Sales</a>
+</div>
+{% endblock %}

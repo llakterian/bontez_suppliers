@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Sales - Bontez Suppliers{% endblock %}
+
+{% block content %}
+<h2>Sales</h2>
+
+<div class="actions">
+    <a href="{{ url_for('sales.create_sale') }}" class="btn btn-primary">Create New Sale</a>
+</div>
+
+{% if sales.items %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Client</th>
+                <th>Supplier</th>
+                <th>Total Amount</th>
+                <th>Paid</th>
+                <th>Balance</th>
+                <th>Payment Method</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sale in sales.items %}
+            <tr>
+                <td>{{ sale.sale_date.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td>{{ sale.client.name }}</td>
+                <td>{{ sale.supplier.name if sale.supplier else 'Mixed Gas' }}</td>
+                <td>KES {{ "{:.2f}".format(sale.total_amount) }}</td>
+                <td>KES {{ "{:.2f}".format(sale.amount_paid) }}</td>
+                <td>KES {{ "{:.2f}".format(sale.remaining_balance()) }}</td>
+                <td>{{ sale.payment_method }}</td>
+                <td><a href="{{ url_for('sales.view_sale', sale_id=sale.id) }}">View</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <div class="pagination">
+        {% if sales.has_prev %}
+            <a href="{{ url_for('sales.list_sales', page=sales.prev_num) }}">Previous</a>
+        {% endif %}
+        
+        Page {{ sales.page }} of {{ sales.pages }}
+        
+        {% if sales.has_next %}
+            <a href="{{ url_for('sales.list_sales', page=sales.next_num) }}">Next</a>
+        {% endif %}
+    </div>
+{% else %}
+    <p>No sales recorded yet.</p>
+{% endif %}
+{% endblock %}

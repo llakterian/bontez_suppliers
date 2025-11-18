@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Bontez Suppliers{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <h1>Bontez Suppliers</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('main.index') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('clients.list_clients') }}">Clients</a></li>
+                <li><a href="{{ url_for('suppliers.list_suppliers') }}">Suppliers</a></li>
+                <li><a href="{{ url_for('sales.list_sales') }}">Sales</a></li>
+                <li><a href="{{ url_for('reports.daily_report') }}">Reports</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="container main-content">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        {% block content %}{% endblock %}
+    </div>
+    
+    <footer class="footer">
+        <p>Bontez Suppliers Management System - Author: Llakterian</p>
+    </footer>
+</body>
+</html>

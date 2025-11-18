@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block title %}Daily Report - Bontez Suppliers{% endblock %}
+
+{% block extra_css %}
+<style>
+    .report-header {
+        margin-bottom: 20px;
+    }
+    .charts-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+    .chart-wrapper {
+        background-color: white;
+        border: 1px solid #ddd;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .chart-title {
+        font-weight: bold;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+    canvas {
+        max-width: 100%;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h2>Daily Sales Report</h2>
+
+<div class="report-header">
+    <form method="GET" style="display: inline;">
+        <input type="date" name="date" value="{{ report_date.strftime('%Y-%m-%d') }}" required>
+        <button type="submit" class="btn btn-primary">Load Report</button>
+    </form>
+    <p>Date: <strong>{{ report_date.strftime('%B %d, %Y') }}</strong></p>
+</div>
+
+<div class="charts-container">
+    <div class="chart-wrapper">
+        <div class="chart-title">Sales by Supplier (Bar Chart)</div>
+        <canvas id="barChart"></canvas>
+    </div>
+    <div class="chart-wrapper">
+        <div class="chart-title">Sales Distribution (Pie Chart)</div>
+        <canvas id="pieChart"></canvas>
+    </div>
+</div>
+
+<div class="summary-section">
+    <h3>Summary</h3>
+    <div id="summaryContent">
+        <p>Loading summary...</p>
+    </div>
+</div>
+
+<div class="actions">
+    <a href="{{ url_for('reports.monthly_report') }}" class="btn btn-primary">View Monthly Report</a>
+    <a href="{{ url_for('main.index') }}" class="btn btn-secondary">Back to Dashboard</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const reportDate = '{{ report_date.strftime('%Y-%m-%d') }}';
+    
+    fetch('/reports/daily-data?date=' + reportDate)
+        .then(response => response.json())
+        .then(data => {
+            const colors = data.colors;
+            const labels = data.labels;
+            const salesData = data.data;
+            
+            const barCtx = document.getElementById('barChart').getContext('2d');
+            new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Sales Amount (KES)',
+                        data: salesData,
+                        backgroundColor: colors,
+                        borderColor: colors,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Amount (KES)'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            const pieCtx = document.getElementById('pieChart').getContext('2d');
+            new Chart(pieCtx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: salesData,
+                        backgroundColor: colors,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+            
+            const total = salesData.reduce((a, b) => a + b, 0);
+            const summaryHtml = '<p><strong>Total Daily Sales:</strong> KES ' + total.toFixed(2) + '</p>' +
+                               '<p><strong>Number of Suppliers:</strong> ' + labels.length + '</p>';
+            document.getElementById('summaryContent').innerHTML = summaryHtml;
+        });
+});
+</script>
+{% endblock %}
