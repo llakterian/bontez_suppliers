@@ -45,7 +45,7 @@
 
 <h3 style="margin-top: 36px;">Items Purchased</h3>
 {% if sale.items %}
-    <div style="overflow-x: auto;">
+    <div class="table-wrapper">
         <table class="data-table">
             <thead>
                 <tr>
@@ -89,7 +89,7 @@
 {% if sale.payment_method == 'installment' %}
 <h3 style="margin-top: 36px;">Installment Schedule</h3>
 {% if sale.installments %}
-    <div style="overflow-x: auto;">
+    <div class="table-wrapper">
         <table class="data-table">
             <thead>
                 <tr>

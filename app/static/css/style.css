@@ -257,6 +257,33 @@ h3 {
     z-index: 1;
 }
 
+/* Table wrapper for responsive horizontal scrolling on mobile */
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.table-wrapper::-webkit-scrollbar {
+    height: 6px;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+    background: var(--light-gray);
+    border-radius: 3px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 3px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-dark);
+}
+
 .data-table {
     width: 100%;
     border-collapse: collapse;
@@ -1089,5 +1116,279 @@ h3 {
     .price-reference th,
     .price-reference td {
         padding: 12px;
+    }
+}
+
+/* Ultra Large Devices (4K Monitors) - 1440px and above */
+@media (min-width: 1440px) {
+    .container {
+        max-width: 1320px;
+        margin: 0 auto;
+        padding: 0 40px;
+    }
+
+    .navbar .container {
+        padding: 1.25rem 40px;
+    }
+
+    .logo h1 {
+        font-size: 28px;
+    }
+
+    h1 {
+        font-size: 42px;
+    }
+
+    h2 {
+        font-size: 38px;
+        margin-bottom: 28px;
+    }
+
+    h3 {
+        font-size: 26px;
+    }
+
+    .dashboard-stats {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 28px;
+    }
+
+    .stat-card {
+        padding: 32px;
+    }
+
+    .stat-card h3 {
+        font-size: 18px;
+    }
+
+    .stat-card .value {
+        font-size: 48px;
+    }
+
+    .card {
+        padding: 32px;
+        margin-bottom: 28px;
+    }
+
+    .form {
+        padding: 36px;
+        margin-bottom: 28px;
+    }
+
+    .form-group {
+        margin-bottom: 24px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        font-size: 16px;
+        padding: 14px 16px;
+    }
+
+    .btn {
+        padding: 16px 40px;
+        font-size: 16px;
+    }
+
+    .data-table {
+        font-size: 16px;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: 16px;
+    }
+
+    .supplier-grid {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 28px;
+    }
+
+    .chart-container {
+        max-height: 550px;
+        margin: 32px 0;
+    }
+}
+
+/* Extra Small Phones (Below 320px) - Micro devices */
+@media (max-width: 319px) {
+    .container {
+        padding: 0 8px;
+    }
+
+    .navbar {
+        padding: 0.5rem 0;
+    }
+
+    .navbar .container {
+        padding: 0.5rem 8px;
+        gap: 8px;
+    }
+
+    .logo-icon {
+        font-size: 18px;
+        width: 32px;
+        height: 32px;
+        line-height: 32px;
+    }
+
+    .logo h1 {
+        font-size: 16px;
+    }
+
+    .nav-links {
+        gap: 4px;
+    }
+
+    .nav-links a {
+        padding: 8px;
+        font-size: 13px;
+    }
+
+    main {
+        padding: 10px 0;
+    }
+
+    h1 {
+        font-size: 20px;
+        margin-bottom: 12px;
+    }
+
+    h2 {
+        font-size: 18px;
+        margin-bottom: 12px;
+    }
+
+    h3 {
+        font-size: 14px;
+    }
+
+    .btn {
+        padding: 10px 16px;
+        font-size: 13px;
+    }
+
+    .data-table {
+        font-size: 12px;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: 8px;
+    }
+}
+
+/* Landscape Mobile (up to 600px width) - Better horizontal spacing */
+@media (max-height: 500px) and (orientation: landscape) {
+    main {
+        padding: 10px 0;
+    }
+
+    .navbar .container {
+        padding: 0.5rem;
+        gap: 8px;
+    }
+
+    .logo h1 {
+        font-size: 18px;
+    }
+
+    .dashboard-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .stat-card {
+        padding: 12px;
+    }
+
+    .stat-card h3 {
+        font-size: 12px;
+    }
+
+    .stat-card .value {
+        font-size: 20px;
+    }
+
+    .form {
+        padding: 12px;
+    }
+
+    .chart-container {
+        max-height: 300px;
+    }
+}
+
+/* High DPI Screens (Retina, pixel density > 2) */
+@media (min-device-pixel-ratio: 2) {
+    * {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    img {
+        image-rendering: -webkit-optimize-contrast;
+    }
+}
+
+/* Touch Devices - Larger touch targets */
+@media (hover: none) and (pointer: coarse) {
+    .btn,
+    .nav-links a,
+    .data-table tbody tr {
+        min-height: 44px;
+        min-width: 44px;
+    }
+
+    .btn {
+        padding: 12px 20px;
+    }
+
+    input[type="checkbox"],
+    input[type="radio"] {
+        min-width: 20px;
+        min-height: 20px;
+        cursor: pointer;
+    }
+
+    a {
+        -webkit-tap-highlight-color: transparent;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .navbar,
+    .footer,
+    .btn,
+    .form-actions {
+        display: none;
+    }
+
+    body {
+        background: white;
+        color: black;
+    }
+
+    main {
+        padding: 0;
+        max-width: 100%;
+    }
+
+    .card,
+    .container {
+        box-shadow: none;
+        border: 1px solid #ccc;
+        page-break-inside: avoid;
+    }
+
+    .data-table {
+        border-collapse: collapse;
+    }
+
+    .data-table th,
+    .data-table td {
+        border: 1px solid #ccc;
     }
 }
