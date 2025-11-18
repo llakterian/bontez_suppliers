@@ -1,23 +1,56 @@
-/* Bontez Suppliers - Modern Responsive Design */
+/* Bontez Suppliers - Modern Minimalist Design with Glassmorphism */
 /* Author: Llakterian */
+/* Updated: Modern UI with Clean Layout, Glassmorphism & Responsive Design */
 
 :root {
-    --primary: #0066cc;
-    --primary-dark: #0052a3;
-    --primary-light: #e6f0ff;
-    --secondary: #00b4d8;
-    --success: #28a745;
-    --warning: #ffc107;
-    --danger: #dc3545;
-    --info: #17a2b8;
-    --light: #f8f9fa;
-    --muted: #6c757d;
-    --dark: #212529;
-    --border: #dee2e6;
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
-    --shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-    --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.15);
+    /* Primary Color Palette - Modern Blue */
+    --primary: #2563eb;
+    --primary-dark: #1e40af;
+    --primary-light: #dbeafe;
+    --primary-lighter: #eff6ff;
+    
+    /* Secondary & Accent Colors */
+    --secondary: #0ea5e9;
+    --accent: #06b6d4;
+    
+    /* Status Colors */
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --info: #3b82f6;
+    
+    /* Neutrals - Modern Gray Scale */
+    --light: #f9fafb;
+    --light-gray: #f3f4f6;
+    --gray: #d1d5db;
+    --gray-dark: #9ca3af;
+    --muted: #6b7280;
+    --dark: #111827;
+    --border: #e5e7eb;
+    
+    /* Glassmorphism Effects */
+    --glass-bg: rgba(255, 255, 255, 0.8);
+    --glass-backdrop: blur(10px);
+    
+    /* Shadows - Subtle & Modern */
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+    --shadow-md: 0 10px 15px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 20px 25px rgba(0, 0, 0, 0.1);
+    --shadow-glass: 0 8px 32px rgba(31, 38, 135, 0.15);
+    
+    /* Transitions */
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: all 0.2s ease;
+    
+    /* Spacing */
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-2xl: 3rem;
 }
 
 * {
@@ -28,29 +61,44 @@
 
 html {
     scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
     color: var(--dark);
     line-height: 1.6;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    font-size: 16px;
+}
+
+main {
+    flex: 1;
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 var(--space-lg);
+    width: 100%;
 }
 
+/* ========================================
+   NAVIGATION & HEADER
+   ======================================== */
+
 .navbar {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-    color: white;
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-backdrop);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    color: var(--dark);
     padding: 0;
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-glass);
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -60,98 +108,128 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 20px;
+    padding: var(--space-lg) var(--space-lg);
+    gap: var(--space-xl);
 }
 
 .logo {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: var(--space-md);
+    text-decoration: none;
+    transition: var(--transition);
 }
 
-.logo h1 {
-    font-size: 24px;
-    font-weight: 700;
-    color: white;
-    letter-spacing: -0.5px;
+.logo:hover {
+    transform: translateY(-2px);
 }
 
 .logo-icon {
-    display: inline-block;
-    width: 32px;
-    height: 32px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 18px;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    border-radius: 12px;
+    color: white;
+    font-size: 20px;
+    font-weight: 700;
+    box-shadow: var(--shadow-sm);
+}
+
+.logo h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--dark);
+    letter-spacing: -0.5px;
+    margin: 0;
 }
 
 .nav-links {
     list-style: none;
     display: flex;
-    gap: 2rem;
+    gap: var(--space-2xl);
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 .nav-links a {
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--muted);
     text-decoration: none;
     font-weight: 500;
     font-size: 14px;
-    transition: var(--transition);
+    transition: var(--transition-fast);
     position: relative;
+    text-transform: capitalize;
 }
 
 .nav-links a:hover,
 .nav-links a.active {
-    color: white;
+    color: var(--primary);
 }
 
-.nav-links a:after {
+.nav-links a::after {
     content: '';
     position: absolute;
-    bottom: -5px;
+    bottom: -4px;
     left: 0;
     width: 0;
     height: 2px;
-    background: rgba(255, 255, 255, 0.8);
-    transition: var(--transition);
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    transition: var(--transition-fast);
 }
 
-.nav-links a:hover:after {
+.nav-links a:hover::after,
+.nav-links a.active::after {
     width: 100%;
 }
 
 .main-content {
-    padding: 40px 0;
+    padding: var(--space-2xl) 0;
     flex: 1;
 }
 
+/* ========================================
+   FOOTER
+   ======================================== */
+
 .footer {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-    color: white;
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-backdrop);
+    border-top: 1px solid rgba(255, 255, 255, 0.5);
+    color: var(--muted);
     text-align: center;
-    padding: 30px 0;
-    margin-top: 50px;
-    font-size: 14px;
+    padding: var(--space-2xl) 0;
+    margin-top: var(--space-2xl);
+    font-size: 13px;
+    box-shadow: var(--shadow-glass);
 }
 
 .footer p {
     margin: 0;
-    opacity: 0.9;
+    opacity: 0.85;
 }
 
+/* ========================================
+   TYPOGRAPHY
+   ======================================== */
+
 h1, h2, h3, h4, h5, h6 {
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: -0.5px;
-    margin-bottom: 1rem;
     color: var(--dark);
+    line-height: 1.3;
+}
+
+h1 {
+    font-size: 36px;
+    margin-bottom: var(--space-xl);
 }
 
 h2 {
-    font-size: 32px;
-    margin-bottom: 1.5rem;
+    font-size: 28px;
+    margin-bottom: var(--space-xl);
     background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -159,20 +237,47 @@ h2 {
 }
 
 h3 {
-    font-size: 22px;
+    font-size: 20px;
     color: var(--dark);
-    margin-bottom: 1.25rem;
+    margin-bottom: var(--space-lg);
 }
 
+h4 {
+    font-size: 18px;
+    margin-bottom: var(--space-md);
+}
+
+p {
+    margin-bottom: var(--space-md);
+    color: var(--muted);
+    line-height: 1.7;
+}
+
+a {
+    color: var(--primary);
+    text-decoration: none;
+    transition: var(--transition-fast);
+}
+
+a:hover {
+    color: var(--primary-dark);
+}
+
+/* ========================================
+   ALERTS & NOTIFICATIONS
+   ======================================== */
+
 .alert {
-    padding: 16px 20px;
-    margin-bottom: 20px;
-    border-radius: 8px;
+    padding: var(--space-lg);
+    margin-bottom: var(--space-xl);
+    border-radius: 12px;
     border-left: 4px solid;
     display: flex;
-    align-items: center;
-    gap: 12px;
+    align-items: flex-start;
+    gap: var(--space-lg);
     animation: slideIn 0.3s ease-out;
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-backdrop);
 }
 
 @keyframes slideIn {
@@ -187,60 +292,66 @@ h3 {
 }
 
 .alert-success {
-    background-color: #d4edda;
-    color: #155724;
-    border-color: #28a745;
+    background-color: rgba(16, 185, 129, 0.1);
+    color: #065f46;
+    border-color: var(--success);
 }
 
 .alert-error {
-    background-color: #f8d7da;
-    color: #721c24;
-    border-color: #dc3545;
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #7f1d1d;
+    border-color: var(--danger);
 }
+
+/* ========================================
+   DASHBOARD & STAT CARDS
+   ======================================== */
 
 .dashboard-stats {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 24px;
-    margin-bottom: 40px;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--space-2xl);
+    margin-bottom: var(--space-2xl);
 }
 
 .stat-card {
-    background: white;
-    padding: 28px;
-    border-radius: 12px;
-    box-shadow: var(--shadow);
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-backdrop);
+    padding: var(--space-xl);
+    border-radius: 16px;
+    box-shadow: var(--shadow-glass);
     text-align: center;
     transition: var(--transition);
-    border-top: 4px solid var(--primary);
+    border: 1px solid rgba(255, 255, 255, 0.5);
     position: relative;
     overflow: hidden;
 }
 
-.stat-card:before {
+.stat-card::before {
     content: '';
     position: absolute;
     top: -50%;
     right: -50%;
     width: 200px;
     height: 200px;
-    background: linear-gradient(135deg, var(--primary-light) 0%, transparent 100%);
+    background: linear-gradient(135deg, var(--primary-lighter) 0%, transparent 100%);
     border-radius: 50%;
-    opacity: 0.5;
+    opacity: 0.3;
 }
 
 .stat-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-8px);
     box-shadow: var(--shadow-lg);
+    border-color: rgba(255, 255, 255, 0.7);
 }
 
 .stat-card h3 {
-    margin: 0 0 10px 0;
+    margin: 0 0 var(--space-md) 0;
     color: var(--muted);
-    font-size: 14px;
-    font-weight: 500;
+    font-size: 13px;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
     position: relative;
     z-index: 1;
 }
@@ -252,18 +363,30 @@ h3 {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    margin: 10px 0;
+    margin: var(--space-md) 0;
     position: relative;
     z-index: 1;
 }
 
-/* Table wrapper for responsive horizontal scrolling on mobile */
+.stat-card p {
+    font-size: 13px;
+    color: var(--gray-dark);
+    position: relative;
+    z-index: 1;
+    margin-bottom: 0;
+}
+
+/* ========================================
+   TABLES
+   ======================================== */
+
 .table-wrapper {
     width: 100%;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    border-radius: 8px;
-    margin-bottom: 20px;
+    border-radius: 16px;
+    margin-bottom: var(--space-xl);
+    box-shadow: var(--shadow-glass);
 }
 
 .table-wrapper::-webkit-scrollbar {
@@ -288,9 +411,8 @@ h3 {
     width: 100%;
     border-collapse: collapse;
     background-color: white;
-    box-shadow: var(--shadow);
-    margin-bottom: 20px;
-    border-radius: 8px;
+    margin-bottom: var(--space-xl);
+    border-radius: 16px;
     overflow: hidden;
 }
 
@@ -300,27 +422,26 @@ h3 {
 }
 
 .data-table th {
-    padding: 16px;
+    padding: var(--space-lg);
     text-align: left;
     font-weight: 600;
-    font-size: 14px;
+    font-size: 13px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
 .data-table td {
-    padding: 14px 16px;
+    padding: var(--space-lg);
     border-bottom: 1px solid var(--border);
     font-size: 14px;
 }
 
 .data-table tbody tr {
-    transition: var(--transition);
+    transition: var(--transition-fast);
 }
 
 .data-table tbody tr:hover {
     background-color: var(--light);
-    transform: scale(1.01);
 }
 
 .data-table tbody tr:last-child td {
@@ -330,8 +451,8 @@ h3 {
 .data-table a {
     color: var(--primary);
     text-decoration: none;
-    font-weight: 500;
-    transition: var(--transition);
+    font-weight: 600;
+    transition: var(--transition-fast);
 }
 
 .data-table a:hover {
@@ -339,44 +460,51 @@ h3 {
     text-decoration: underline;
 }
 
+/* ========================================
+   FORMS
+   ======================================== */
+
 .form {
-    background-color: white;
-    padding: 32px;
-    border-radius: 12px;
-    box-shadow: var(--shadow);
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-backdrop);
+    padding: var(--space-2xl);
+    border-radius: 16px;
+    box-shadow: var(--shadow-glass);
     max-width: 600px;
-    margin-bottom: 20px;
+    margin-bottom: var(--space-xl);
+    border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
 .form-group {
-    margin-bottom: 24px;
+    margin-bottom: var(--space-xl);
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: var(--space-md);
     font-weight: 600;
     color: var(--dark);
     font-size: 14px;
+    text-transform: capitalize;
 }
 
 .form-group input,
 .form-group select,
 .form-group textarea {
     width: 100%;
-    padding: 12px 14px;
+    padding: var(--space-md) var(--space-lg);
     border: 2px solid var(--border);
-    border-radius: 8px;
+    border-radius: 10px;
     font-size: 14px;
     font-family: inherit;
-    transition: var(--transition);
-    background-color: white;
+    transition: var(--transition-fast);
+    background-color: rgba(255, 255, 255, 0.9);
 }
 
 .form-group input::placeholder,
 .form-group select::placeholder,
 .form-group textarea::placeholder {
-    color: var(--muted);
+    color: var(--gray-dark);
 }
 
 .form-group input:focus,
@@ -384,35 +512,43 @@ h3 {
 .form-group textarea:focus {
     outline: none;
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    background-color: white;
 }
 
 .form-group textarea {
     resize: vertical;
-    min-height: 100px;
+    min-height: 120px;
 }
 
 .form-actions {
     display: flex;
-    gap: 12px;
+    gap: var(--space-lg);
     justify-content: flex-start;
-    margin-top: 28px;
+    margin-top: var(--space-2xl);
+    flex-wrap: wrap;
 }
 
+/* ========================================
+   BUTTONS
+   ======================================== */
+
 .btn {
-    padding: 12px 24px;
+    padding: var(--space-md) var(--space-xl);
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
     font-size: 14px;
     font-weight: 600;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    transition: var(--transition);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    justify-content: center;
+    gap: var(--space-md);
+    transition: var(--transition-fast);
+    text-transform: capitalize;
+    letter-spacing: 0.3px;
+    min-height: 44px;
 }
 
 .btn-primary {
@@ -423,7 +559,7 @@ h3 {
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: var(--shadow);
+    box-shadow: var(--shadow-md);
 }
 
 .btn-primary:active {
@@ -431,72 +567,117 @@ h3 {
 }
 
 .btn-secondary {
-    background-color: var(--muted);
+    background-color: var(--gray-dark);
     color: white;
     box-shadow: var(--shadow-sm);
 }
 
 .btn-secondary:hover {
-    background-color: #5a6268;
+    background-color: var(--muted);
     transform: translateY(-2px);
-    box-shadow: var(--shadow);
+    box-shadow: var(--shadow-md);
 }
+
+.btn-outline {
+    background-color: transparent;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+}
+
+.btn-outline:hover {
+    background-color: var(--primary-lighter);
+    transform: translateY(-2px);
+}
+
+.btn-small {
+    padding: var(--space-sm) var(--space-md);
+    font-size: 13px;
+    min-height: 36px;
+}
+
+/* ========================================
+   ACTION AREAS
+   ======================================== */
 
 .actions {
-    margin: 24px 0;
-    padding: 20px;
-    background-color: white;
-    border-radius: 12px;
-    border-top: 4px solid var(--primary);
-    box-shadow: var(--shadow);
+    margin: var(--space-xl) 0;
+    padding: var(--space-xl);
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-backdrop);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: var(--shadow-glass);
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: var(--space-lg);
 }
 
+/* ========================================
+   PAGINATION
+   ======================================== */
+
 .pagination {
-    margin: 24px 0;
+    margin: var(--space-xl) 0;
     text-align: center;
     display: flex;
     justify-content: center;
-    gap: 8px;
+    gap: var(--space-md);
     flex-wrap: wrap;
 }
 
 .pagination a {
-    padding: 10px 14px;
+    padding: var(--space-md) var(--space-lg);
     background-color: white;
     color: var(--primary);
     text-decoration: none;
-    border-radius: 6px;
-    border: 1px solid var(--border);
-    transition: var(--transition);
-    font-weight: 500;
+    border-radius: 8px;
+    border: 2px solid var(--border);
+    transition: var(--transition-fast);
+    font-weight: 600;
     font-size: 14px;
 }
 
 .pagination a:hover {
-    background-color: var(--primary-light);
+    background-color: var(--primary-lighter);
     border-color: var(--primary);
     transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
 }
 
+/* ========================================
+   CONTENT CARDS & SECTIONS
+   ======================================== */
+
+.card,
 .client-details,
 .sale-details,
-.sale-summary {
-    background-color: white;
-    padding: 24px;
-    border-radius: 12px;
-    box-shadow: var(--shadow);
-    margin-bottom: 24px;
+.sale-summary,
+.summary-section {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-backdrop);
+    padding: var(--space-xl);
+    border-radius: 16px;
+    box-shadow: var(--shadow-glass);
+    margin-bottom: var(--space-xl);
+    border: 1px solid rgba(255, 255, 255, 0.5);
     border-left: 4px solid var(--primary);
+    transition: var(--transition);
+}
+
+.card:hover,
+.client-details:hover,
+.sale-details:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
 }
 
 .client-details p,
 .sale-details p,
 .sale-summary p {
-    margin-bottom: 12px;
+    margin-bottom: var(--space-md);
     font-size: 15px;
+    color: var(--muted);
+    line-height: 1.7;
 }
 
 .color-box {
@@ -504,93 +685,275 @@ h3 {
     width: 24px;
     height: 24px;
     border-radius: 6px;
-    margin-right: 8px;
+    margin-right: var(--space-md);
     vertical-align: middle;
     border: 2px solid rgba(0, 0, 0, 0.1);
     box-shadow: var(--shadow-sm);
 }
 
-.summary-section {
-    background-color: white;
-    padding: 24px;
-    border-radius: 12px;
-    box-shadow: var(--shadow);
-    margin-bottom: 24px;
-}
-
 .item-row {
     border: 2px solid var(--border);
-    padding: 16px;
-    margin: 12px 0;
-    background-color: var(--light);
-    border-radius: 8px;
-    transition: var(--transition);
+    padding: var(--space-lg);
+    margin: var(--space-md) 0;
+    background: var(--light);
+    border-radius: 10px;
+    transition: var(--transition-fast);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-lg);
 }
 
 .item-row:hover {
     border-color: var(--primary);
+    background: rgba(37, 99, 235, 0.02);
     box-shadow: var(--shadow-sm);
 }
 
 .remove-item-btn {
-    background-color: var(--danger);
+    background: linear-gradient(135deg, var(--danger) 0%, #dc2626 100%);
     color: white;
     border: none;
-    padding: 8px 14px;
+    padding: var(--space-sm) var(--space-lg);
     cursor: pointer;
-    border-radius: 6px;
-    font-weight: 500;
+    border-radius: 8px;
+    font-weight: 600;
     font-size: 13px;
-    transition: var(--transition);
-}
-
-.remove-item-btn:hover {
-    background-color: #c82333;
-    transform: translateY(-2px);
+    transition: var(--transition-fast);
     box-shadow: var(--shadow-sm);
 }
 
-/* Extra Small Devices (Mobile Phones) - Below 480px */
-@media (max-width: 479px) {
+.remove-item-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+/* ========================================
+   BADGES & LABELS
+   ======================================== */
+
+.badge {
+    display: inline-block;
+    padding: var(--space-sm) var(--space-md);
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.badge-primary {
+    background: rgba(37, 99, 235, 0.2);
+    color: var(--primary);
+}
+
+.badge-success {
+    background: rgba(16, 185, 129, 0.2);
+    color: var(--success);
+}
+
+.badge-warning {
+    background: rgba(245, 158, 11, 0.2);
+    color: var(--warning);
+}
+
+.badge-danger {
+    background: rgba(239, 68, 68, 0.2);
+    color: var(--danger);
+}
+
+/* ========================================
+   RESPONSIVE DESIGN - MOBILE FIRST
+   ======================================== */
+
+/* Extra Small Devices (Under 320px) */
+@media (max-width: 319px) {
     .container {
-        padding: 0 12px;
+        padding: 0 var(--space-sm);
+        max-width: 100%;
     }
 
     .navbar .container {
-        flex-direction: column;
-        gap: 12px;
-        padding: 0.75rem 12px;
+        padding: var(--space-md) var(--space-sm);
+        gap: var(--space-md);
+        flex-wrap: wrap;
+    }
+
+    .logo {
+        gap: var(--space-sm);
+    }
+
+    .logo-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
     }
 
     .logo h1 {
-        font-size: 18px;
+        font-size: 14px;
     }
 
     .nav-links {
-        flex-direction: column;
-        gap: 8px;
-        width: 100%;
+        gap: var(--space-md);
+        flex-wrap: wrap;
+        justify-content: center;
     }
 
     .nav-links a {
-        display: block;
-        padding: 10px;
-        border-radius: 6px;
-        text-align: center;
-        background: rgba(255, 255, 255, 0.1);
+        padding: var(--space-sm) var(--space-md);
+        font-size: 11px;
+        white-space: nowrap;
     }
 
-    main {
-        padding: 15px 0;
+    .main-content {
+        padding: var(--space-lg) 0;
     }
 
     h1 {
-        font-size: 24px;
+        font-size: 20px;
+        margin-bottom: var(--space-lg);
+    }
+
+    h2 {
+        font-size: 18px;
+        margin-bottom: var(--space-lg);
+    }
+
+    h3 {
+        font-size: 14px;
+        margin-bottom: var(--space-md);
+    }
+
+    .dashboard-stats {
+        grid-template-columns: 1fr;
+        gap: var(--space-md);
+    }
+
+    .stat-card {
+        padding: var(--space-lg);
+        border-radius: 12px;
+    }
+
+    .stat-card h3 {
+        font-size: 11px;
+    }
+
+    .stat-value {
+        font-size: 20px;
+    }
+
+    .form {
+        padding: var(--space-lg);
+        max-width: 100%;
+        margin-bottom: var(--space-lg);
+    }
+
+    .form-group {
+        margin-bottom: var(--space-lg);
+    }
+
+    .form-group label {
+        font-size: 12px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        font-size: 16px;
+        padding: var(--space-md);
+        min-height: 44px;
+        border-radius: 8px;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        gap: var(--space-md);
+        margin-top: var(--space-lg);
+    }
+
+    .btn {
+        width: 100%;
+        padding: var(--space-md);
+        font-size: 13px;
+        border-radius: 8px;
+    }
+
+    .data-table {
+        font-size: 12px;
+        min-width: 280px;
+    }
+
+    .data-table th {
+        padding: var(--space-md);
+        font-size: 11px;
+    }
+
+    .data-table td {
+        padding: var(--space-md);
+        font-size: 12px;
+    }
+
+    .alert {
+        padding: var(--space-lg);
+        font-size: 12px;
+        gap: var(--space-md);
+    }
+
+    .footer {
+        padding: var(--space-lg) var(--space-sm);
+        font-size: 12px;
+    }
+
+    .actions {
+        padding: var(--space-lg);
+        gap: var(--space-md);
+    }
+
+    .pagination {
+        gap: var(--space-sm);
+    }
+
+    .pagination a {
+        padding: var(--space-sm) var(--space-md);
+        font-size: 12px;
+    }
+}
+
+/* Ultra Small Phones (320px - 375px) */
+@media (min-width: 320px) and (max-width: 375px) {
+    .container {
+        padding: 0 var(--space-md);
+    }
+
+    .navbar .container {
+        padding: var(--space-md) var(--space-md);
+        gap: var(--space-lg);
+    }
+
+    .logo h1 {
+        font-size: 16px;
+    }
+
+    .nav-links {
+        gap: var(--space-lg);
+    }
+
+    .nav-links a {
+        padding: var(--space-md) var(--space-md);
+        font-size: 12px;
+    }
+
+    .main-content {
+        padding: var(--space-lg) 0;
+    }
+
+    h1 {
+        font-size: 22px;
+        margin-bottom: var(--space-lg);
     }
 
     h2 {
         font-size: 20px;
-        margin-bottom: 16px;
+        margin-bottom: var(--space-lg);
     }
 
     h3 {
@@ -599,37 +962,131 @@ h3 {
 
     .dashboard-stats {
         grid-template-columns: 1fr;
-        gap: 12px;
+        gap: var(--space-lg);
     }
 
     .stat-card {
-        padding: 16px;
+        padding: var(--space-lg);
     }
 
     .stat-card h3 {
-        font-size: 14px;
-    }
-
-    .stat-card .value {
-        font-size: 24px;
-    }
-
-    .stat-card .change {
         font-size: 12px;
     }
 
-    .card {
-        padding: 16px;
-        margin-bottom: 12px;
+    .stat-value {
+        font-size: 24px;
     }
 
     .form {
-        padding: 16px;
-        margin-bottom: 12px;
+        padding: var(--space-lg);
     }
 
     .form-group {
-        margin-bottom: 12px;
+        margin-bottom: var(--space-lg);
+    }
+
+    .form-group label {
+        font-size: 13px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        font-size: 16px;
+        padding: var(--space-md);
+        min-height: 44px;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        gap: var(--space-md);
+    }
+
+    .btn {
+        width: 100%;
+        padding: var(--space-md);
+        font-size: 13px;
+    }
+
+    .data-table {
+        font-size: 12px;
+        min-width: 300px;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: var(--space-md);
+    }
+}
+
+/* Small Phones (376px - 479px) */
+@media (min-width: 376px) and (max-width: 479px) {
+    .container {
+        padding: 0 var(--space-md);
+    }
+
+    .navbar .container {
+        padding: var(--space-lg) var(--space-md);
+        gap: var(--space-lg);
+    }
+
+    .logo h1 {
+        font-size: 18px;
+    }
+
+    .nav-links {
+        gap: var(--space-lg);
+        flex-wrap: wrap;
+    }
+
+    .nav-links a {
+        padding: var(--space-md) var(--space-lg);
+        font-size: 13px;
+    }
+
+    .main-content {
+        padding: var(--space-xl) 0;
+    }
+
+    h1 {
+        font-size: 24px;
+        margin-bottom: var(--space-lg);
+    }
+
+    h2 {
+        font-size: 22px;
+        margin-bottom: var(--space-lg);
+    }
+
+    h3 {
+        font-size: 18px;
+        margin-bottom: var(--space-md);
+    }
+
+    .dashboard-stats {
+        grid-template-columns: 1fr;
+        gap: var(--space-lg);
+    }
+
+    .stat-card {
+        padding: var(--space-lg);
+    }
+
+    .stat-card h3 {
+        font-size: 13px;
+    }
+
+    .stat-value {
+        font-size: 28px;
+    }
+
+    .form {
+        padding: var(--space-lg);
+        max-width: 100%;
+    }
+
+    .form-group {
+        margin-bottom: var(--space-lg);
     }
 
     .form-group label {
@@ -640,101 +1097,78 @@ h3 {
     .form-group select,
     .form-group textarea {
         font-size: 16px;
-        padding: 10px;
+        padding: var(--space-md);
+        min-height: 44px;
+        border-radius: 8px;
     }
 
     .form-actions {
         flex-direction: column;
-        gap: 10px;
+        gap: var(--space-md);
+        margin-top: var(--space-lg);
     }
 
     .btn {
         width: 100%;
-        justify-content: center;
-        padding: 12px 16px;
+        padding: var(--space-lg);
         font-size: 14px;
-    }
-
-    .btn-small {
-        width: 100%;
+        border-radius: 8px;
     }
 
     .data-table {
-        font-size: 12px;
-        display: block;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    .data-table th,
-    .data-table td {
-        padding: 8px 6px;
+        font-size: 13px;
+        min-width: 320px;
     }
 
     .data-table th {
-        font-size: 11px;
+        padding: var(--space-md);
+        font-size: 12px;
     }
 
-    .badge {
-        font-size: 11px;
-        padding: 4px 8px;
+    .data-table td {
+        padding: var(--space-md);
     }
 
     .alert {
-        padding: 12px;
-        font-size: 14px;
-        margin-bottom: 12px;
+        padding: var(--space-lg);
+        font-size: 13px;
     }
 
     .footer {
-        padding: 16px;
+        padding: var(--space-lg) var(--space-md);
         font-size: 12px;
     }
 
-    .supplier-grid {
-        grid-template-columns: 1fr;
-        gap: 12px;
+    .actions {
+        padding: var(--space-lg);
+        gap: var(--space-md);
     }
 
-    .supplier-card {
-        padding: 16px;
+    .pagination {
+        gap: var(--space-md);
     }
 
-    .color-preview {
-        width: 50px;
-        height: 50px;
-    }
-
-    .chart-container {
-        max-height: 300px;
-        margin: 16px 0;
-    }
-
-    .price-reference {
+    .pagination a {
+        padding: var(--space-md) var(--space-lg);
         font-size: 12px;
-        overflow-x: auto;
     }
 
-    .price-reference table {
-        font-size: 11px;
-    }
-
-    .price-reference th,
-    .price-reference td {
-        padding: 6px;
+    .item-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-md);
     }
 }
 
-/* Small Devices (Mobile Phones) - 480px to 767px */
-@media (min-width: 480px) and (max-width: 767px) {
+/* Medium Phones (480px - 639px) */
+@media (min-width: 480px) and (max-width: 639px) {
     .container {
-        padding: 0 15px;
+        padding: 0 var(--space-lg);
     }
 
     .navbar .container {
-        flex-direction: row;
-        gap: 20px;
-        padding: 0.875rem 15px;
+        padding: var(--space-lg) var(--space-lg);
+        gap: var(--space-xl);
     }
 
     .logo h1 {
@@ -742,131 +1176,129 @@ h3 {
     }
 
     .nav-links {
-        gap: 12px;
+        gap: var(--space-xl);
+        flex-wrap: wrap;
+        justify-content: center;
     }
 
     .nav-links a {
         font-size: 13px;
-        padding: 8px 12px;
+        padding: var(--space-md) var(--space-lg);
     }
 
-    main {
-        padding: 20px 0;
+    .main-content {
+        padding: var(--space-xl) 0;
     }
 
     h1 {
         font-size: 28px;
+        margin-bottom: var(--space-lg);
     }
 
     h2 {
-        font-size: 22px;
-        margin-bottom: 18px;
+        font-size: 24px;
+        margin-bottom: var(--space-lg);
     }
 
     h3 {
         font-size: 18px;
+        margin-bottom: var(--space-lg);
     }
 
     .dashboard-stats {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
+        grid-template-columns: 1fr;
+        gap: var(--space-lg);
     }
 
     .stat-card {
-        padding: 18px;
+        padding: var(--space-lg);
     }
 
     .stat-card h3 {
-        font-size: 14px;
+        font-size: 13px;
     }
 
-    .stat-card .value {
+    .stat-value {
         font-size: 28px;
     }
 
-    .card {
-        padding: 18px;
-        margin-bottom: 15px;
-    }
-
     .form {
-        padding: 18px;
-        margin-bottom: 15px;
+        padding: var(--space-xl);
+        max-width: 100%;
     }
 
     .form-group {
-        margin-bottom: 15px;
+        margin-bottom: var(--space-lg);
+    }
+
+    .form-group label {
+        font-size: 14px;
     }
 
     .form-group input,
     .form-group select,
     .form-group textarea {
         font-size: 16px;
-        padding: 10px;
+        padding: var(--space-md);
+        min-height: 44px;
+        border-radius: 8px;
     }
 
     .form-actions {
         flex-direction: column;
-        gap: 12px;
+        gap: var(--space-md);
+        margin-top: var(--space-lg);
     }
 
     .btn {
         width: 100%;
-        justify-content: center;
-        padding: 12px;
-        font-size: 15px;
+        padding: var(--space-lg);
+        font-size: 14px;
     }
 
     .data-table {
         font-size: 13px;
-        display: block;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
+        min-width: 100%;
     }
 
-    .data-table th,
+    .data-table th {
+        padding: var(--space-md);
+        font-size: 12px;
+    }
+
     .data-table td {
-        padding: 10px 8px;
+        padding: var(--space-md);
     }
 
     .badge {
         font-size: 12px;
-        padding: 5px 10px;
     }
 
-    .supplier-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
-    }
-
-    .supplier-card {
-        padding: 18px;
-    }
-
-    .chart-container {
-        max-height: 320px;
-        margin: 18px 0;
-    }
-
-    .price-reference {
+    .alert {
+        padding: var(--space-lg);
         font-size: 13px;
-        overflow-x: auto;
     }
 
-    .price-reference th,
-    .price-reference td {
-        padding: 8px;
+    .footer {
+        padding: var(--space-lg) var(--space-lg);
+        font-size: 13px;
+    }
+
+    .item-row {
+        flex-direction: column;
+        align-items: flex-start;
     }
 }
 
-/* Medium Devices (Tablets) - 768px to 1024px */
-@media (min-width: 768px) and (max-width: 1024px) {
+/* Large Phones/Small Tablets (640px - 767px) */
+@media (min-width: 640px) and (max-width: 767px) {
     .container {
-        padding: 0 20px;
+        padding: 0 var(--space-lg);
     }
 
     .navbar .container {
-        padding: 1rem 20px;
+        padding: var(--space-lg) var(--space-lg);
+        gap: var(--space-xl);
     }
 
     .logo h1 {
@@ -874,24 +1306,28 @@ h3 {
     }
 
     .nav-links {
-        gap: 24px;
+        gap: var(--space-xl);
+        flex-wrap: wrap;
+        justify-content: center;
     }
 
     .nav-links a {
         font-size: 14px;
+        padding: var(--space-md) var(--space-lg);
     }
 
-    main {
-        padding: 25px 0;
+    .main-content {
+        padding: var(--space-xl) 0;
     }
 
     h1 {
-        font-size: 32px;
+        font-size: 30px;
+        margin-bottom: var(--space-lg);
     }
 
     h2 {
         font-size: 26px;
-        margin-bottom: 20px;
+        margin-bottom: var(--space-lg);
     }
 
     h3 {
@@ -900,103 +1336,98 @@ h3 {
 
     .dashboard-stats {
         grid-template-columns: repeat(2, 1fr);
-        gap: 18px;
+        gap: var(--space-lg);
     }
 
     .stat-card {
-        padding: 20px;
+        padding: var(--space-lg);
     }
 
     .stat-card h3 {
-        font-size: 15px;
+        font-size: 14px;
     }
 
-    .stat-card .value {
-        font-size: 32px;
-    }
-
-    .card {
-        padding: 20px;
-        margin-bottom: 18px;
+    .stat-value {
+        font-size: 28px;
     }
 
     .form {
-        padding: 22px;
-        margin-bottom: 18px;
+        padding: var(--space-xl);
+        max-width: 100%;
     }
 
     .form-group {
-        margin-bottom: 18px;
+        margin-bottom: var(--space-lg);
+    }
+
+    .form-group label {
+        font-size: 14px;
     }
 
     .form-group input,
     .form-group select,
     .form-group textarea {
         font-size: 15px;
-        padding: 12px;
+        padding: var(--space-md);
+        min-height: 44px;
+        border-radius: 10px;
     }
 
     .form-actions {
-        flex-direction: row;
-        gap: 15px;
+        flex-direction: column;
+        gap: var(--space-md);
+        margin-top: var(--space-lg);
     }
 
     .btn {
-        padding: 12px 24px;
+        width: 100%;
+        padding: var(--space-lg);
         font-size: 14px;
     }
 
     .data-table {
-        font-size: 14px;
+        font-size: 13px;
+        min-width: 100%;
     }
 
-    .data-table th,
+    .data-table th {
+        padding: var(--space-md);
+        font-size: 12px;
+    }
+
     .data-table td {
-        padding: 12px;
+        padding: var(--space-md);
     }
 
     .badge {
-        font-size: 13px;
-        padding: 6px 12px;
+        font-size: 12px;
     }
 
-    .supplier-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 18px;
-    }
-
-    .supplier-card {
-        padding: 20px;
-    }
-
-    .chart-container {
-        max-height: 380px;
-        margin: 20px 0;
-    }
-
-    .recent-sales {
-        max-height: 400px;
-        overflow-y: auto;
-    }
-
-    .price-reference {
+    .alert {
+        padding: var(--space-lg);
         font-size: 14px;
     }
 
-    .price-reference th,
-    .price-reference td {
-        padding: 10px;
+    .footer {
+        padding: var(--space-lg) var(--space-lg);
+        font-size: 13px;
+    }
+
+    .item-row {
+        flex-direction: row;
+        gap: var(--space-lg);
     }
 }
 
-/* Large Devices (Desktop) - 1025px and above */
-@media (min-width: 1025px) {
+/* Tablets (768px - 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
     .container {
-        padding: 0 20px;
+        padding: 0 var(--space-xl);
+        max-width: 100%;
     }
 
     .navbar .container {
-        padding: 1rem 20px;
+        padding: var(--space-lg) var(--space-xl);
     }
 
     .logo h1 {
@@ -1004,15 +1435,147 @@ h3 {
     }
 
     .nav-links {
-        gap: 28px;
+        gap: var(--space-2xl);
+        flex-wrap: wrap;
+    }
+
+    .nav-links a {
+        font-size: 14px;
+    }
+
+    .main-content {
+        padding: var(--space-2xl) 0;
+    }
+
+    h1 {
+        font-size: 34px;
+        margin-bottom: var(--space-lg);
+    }
+
+    h2 {
+        font-size: 28px;
+        margin-bottom: var(--space-xl);
+    }
+
+    h3 {
+        font-size: 22px;
+        margin-bottom: var(--space-lg);
+    }
+
+    .dashboard-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-xl);
+    }
+
+    .stat-card {
+        padding: var(--space-xl);
+    }
+
+    .stat-card h3 {
+        font-size: 14px;
+    }
+
+    .stat-value {
+        font-size: 32px;
+    }
+
+    .form {
+        padding: var(--space-2xl);
+        max-width: 100%;
+    }
+
+    .form-group {
+        margin-bottom: var(--space-lg);
+    }
+
+    .form-group label {
+        font-size: 15px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        font-size: 15px;
+        padding: var(--space-md);
+        min-height: 44px;
+    }
+
+    .form-actions {
+        flex-direction: row;
+        gap: var(--space-lg);
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        padding: var(--space-md) var(--space-xl);
+        font-size: 14px;
+    }
+
+    .data-table {
+        font-size: 14px;
+    }
+
+    .data-table th {
+        padding: var(--space-lg);
+    }
+
+    .data-table td {
+        padding: var(--space-lg);
+    }
+
+    .badge {
+        font-size: 13px;
+    }
+
+    .alert {
+        padding: var(--space-lg);
+        font-size: 15px;
+    }
+
+    .footer {
+        padding: var(--space-xl) var(--space-xl);
+        font-size: 14px;
+    }
+
+    .pagination {
+        gap: var(--space-lg);
+    }
+
+    .pagination a {
+        padding: var(--space-md) var(--space-lg);
+        font-size: 14px;
+    }
+
+    .item-row {
+        flex-direction: row;
+        gap: var(--space-lg);
+    }
+}
+
+/* Large Devices (Desktop) - 1025px and above */
+@media (min-width: 1025px) {
+    .container {
+        padding: 0 var(--space-lg);
+    }
+
+    .navbar .container {
+        padding: var(--space-lg) var(--space-lg);
+    }
+
+    .logo h1 {
+        font-size: 24px;
+    }
+
+    .nav-links {
+        gap: var(--space-2xl);
     }
 
     .nav-links a {
         font-size: 15px;
     }
 
-    main {
-        padding: 28px 0;
+    .main-content {
+        padding: var(--space-2xl) 0;
     }
 
     h1 {
@@ -1021,58 +1584,52 @@ h3 {
 
     h2 {
         font-size: 32px;
-        margin-bottom: 24px;
+        margin-bottom: var(--space-xl);
     }
 
     h3 {
-        font-size: 22px;
+        font-size: 24px;
     }
 
     .dashboard-stats {
         grid-template-columns: repeat(4, 1fr);
-        gap: 20px;
+        gap: var(--space-xl);
     }
 
     .stat-card {
-        padding: 24px;
+        padding: var(--space-xl);
     }
 
     .stat-card h3 {
         font-size: 16px;
     }
 
-    .stat-card .value {
+    .stat-value {
         font-size: 36px;
     }
 
-    .card {
-        padding: 24px;
-        margin-bottom: 20px;
-    }
-
     .form {
-        padding: 28px;
-        margin-bottom: 20px;
+        padding: var(--space-2xl);
     }
 
     .form-group {
-        margin-bottom: 20px;
+        margin-bottom: var(--space-lg);
     }
 
     .form-group input,
     .form-group select,
     .form-group textarea {
         font-size: 15px;
-        padding: 12px;
+        padding: var(--space-md);
     }
 
     .form-actions {
         flex-direction: row;
-        gap: 20px;
+        gap: var(--space-lg);
     }
 
     .btn {
-        padding: 14px 32px;
+        padding: var(--space-md) var(--space-xl);
         font-size: 15px;
     }
 
@@ -1082,53 +1639,24 @@ h3 {
 
     .data-table th,
     .data-table td {
-        padding: 14px;
+        padding: var(--space-lg);
     }
 
     .badge {
         font-size: 14px;
-        padding: 7px 14px;
-    }
-
-    .supplier-grid {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 20px;
-    }
-
-    .supplier-card {
-        padding: 24px;
-    }
-
-    .chart-container {
-        max-height: 450px;
-        margin: 24px 0;
-    }
-
-    .recent-sales {
-        max-height: 500px;
-        overflow-y: auto;
-    }
-
-    .price-reference {
-        font-size: 15px;
-    }
-
-    .price-reference th,
-    .price-reference td {
-        padding: 12px;
     }
 }
 
-/* Ultra Large Devices (4K Monitors) - 1440px and above */
+/* Ultra Large Devices (4K) - 1440px and above */
 @media (min-width: 1440px) {
     .container {
         max-width: 1320px;
         margin: 0 auto;
-        padding: 0 40px;
+        padding: 0 var(--space-2xl);
     }
 
     .navbar .container {
-        padding: 1.25rem 40px;
+        padding: var(--space-lg) var(--space-2xl);
     }
 
     .logo h1 {
@@ -1140,54 +1668,48 @@ h3 {
     }
 
     h2 {
-        font-size: 38px;
-        margin-bottom: 28px;
+        font-size: 36px;
+        margin-bottom: var(--space-2xl);
     }
 
     h3 {
-        font-size: 26px;
+        font-size: 28px;
     }
 
     .dashboard-stats {
         grid-template-columns: repeat(4, 1fr);
-        gap: 28px;
+        gap: var(--space-2xl);
     }
 
     .stat-card {
-        padding: 32px;
+        padding: var(--space-2xl);
     }
 
     .stat-card h3 {
         font-size: 18px;
     }
 
-    .stat-card .value {
+    .stat-value {
         font-size: 48px;
     }
 
-    .card {
-        padding: 32px;
-        margin-bottom: 28px;
-    }
-
     .form {
-        padding: 36px;
-        margin-bottom: 28px;
+        padding: var(--space-2xl);
     }
 
     .form-group {
-        margin-bottom: 24px;
+        margin-bottom: var(--space-xl);
     }
 
     .form-group input,
     .form-group select,
     .form-group textarea {
         font-size: 16px;
-        padding: 14px 16px;
+        padding: var(--space-lg);
     }
 
     .btn {
-        padding: 16px 40px;
+        padding: var(--space-lg) var(--space-2xl);
         font-size: 16px;
     }
 
@@ -1197,97 +1719,19 @@ h3 {
 
     .data-table th,
     .data-table td {
-        padding: 16px;
-    }
-
-    .supplier-grid {
-        grid-template-columns: repeat(5, 1fr);
-        gap: 28px;
-    }
-
-    .chart-container {
-        max-height: 550px;
-        margin: 32px 0;
+        padding: var(--space-lg);
     }
 }
 
-/* Extra Small Phones (Below 320px) - Micro devices */
-@media (max-width: 319px) {
-    .container {
-        padding: 0 8px;
-    }
-
-    .navbar {
-        padding: 0.5rem 0;
-    }
-
-    .navbar .container {
-        padding: 0.5rem 8px;
-        gap: 8px;
-    }
-
-    .logo-icon {
-        font-size: 18px;
-        width: 32px;
-        height: 32px;
-        line-height: 32px;
-    }
-
-    .logo h1 {
-        font-size: 16px;
-    }
-
-    .nav-links {
-        gap: 4px;
-    }
-
-    .nav-links a {
-        padding: 8px;
-        font-size: 13px;
-    }
-
-    main {
-        padding: 10px 0;
-    }
-
-    h1 {
-        font-size: 20px;
-        margin-bottom: 12px;
-    }
-
-    h2 {
-        font-size: 18px;
-        margin-bottom: 12px;
-    }
-
-    h3 {
-        font-size: 14px;
-    }
-
-    .btn {
-        padding: 10px 16px;
-        font-size: 13px;
-    }
-
-    .data-table {
-        font-size: 12px;
-    }
-
-    .data-table th,
-    .data-table td {
-        padding: 8px;
-    }
-}
-
-/* Landscape Mobile (up to 600px width) - Better horizontal spacing */
+/* Landscape Mobile (max-height: 500px) */
 @media (max-height: 500px) and (orientation: landscape) {
-    main {
-        padding: 10px 0;
+    .main-content {
+        padding: var(--space-lg) 0;
     }
 
     .navbar .container {
-        padding: 0.5rem;
-        gap: 8px;
+        padding: var(--space-md) var(--space-lg);
+        gap: var(--space-lg);
     }
 
     .logo h1 {
@@ -1296,31 +1740,27 @@ h3 {
 
     .dashboard-stats {
         grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
+        gap: var(--space-md);
     }
 
     .stat-card {
-        padding: 12px;
+        padding: var(--space-md);
     }
 
     .stat-card h3 {
-        font-size: 12px;
+        font-size: 11px;
     }
 
-    .stat-card .value {
+    .stat-value {
         font-size: 20px;
     }
 
     .form {
-        padding: 12px;
-    }
-
-    .chart-container {
-        max-height: 300px;
+        padding: var(--space-lg);
     }
 }
 
-/* High DPI Screens (Retina, pixel density > 2) */
+/* High DPI Screens (Retina) */
 @media (min-device-pixel-ratio: 2) {
     * {
         -webkit-font-smoothing: antialiased;
@@ -1332,17 +1772,18 @@ h3 {
     }
 }
 
-/* Touch Devices - Larger touch targets */
+/* Touch Devices - Larger Touch Targets */
 @media (hover: none) and (pointer: coarse) {
     .btn,
     .nav-links a,
-    .data-table tbody tr {
+    .data-table tbody tr,
+    a {
         min-height: 44px;
         min-width: 44px;
     }
 
     .btn {
-        padding: 12px 20px;
+        padding: var(--space-md) var(--space-lg);
     }
 
     input[type="checkbox"],
@@ -1362,7 +1803,8 @@ h3 {
     .navbar,
     .footer,
     .btn,
-    .form-actions {
+    .form-actions,
+    .nav-links {
         display: none;
     }
 
@@ -1371,13 +1813,16 @@ h3 {
         color: black;
     }
 
-    main {
+    .main-content {
         padding: 0;
         max-width: 100%;
     }
 
     .card,
-    .container {
+    .container,
+    .client-details,
+    .sale-details,
+    .summary-section {
         box-shadow: none;
         border: 1px solid #ccc;
         page-break-inside: avoid;
