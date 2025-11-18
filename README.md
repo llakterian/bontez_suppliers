@@ -33,11 +33,21 @@ Payment Tracking
 - Installment plans with flexible payment schedules
 - Outstanding balance tracking
 
+Accessories Sales Tracking
+- Daily accessory sales recording system
+- Track grill, burner, regulator, and hose pipe sales
+- Multiple price variants for burners and regulators
+- Daily, weekly, and monthly accessory reports
+- Revenue breakdown by accessory type
+- Visual charts and analytics
+- Separate from gas sales for better organization
+
 Reporting
 - Daily sales reports with bar and pie charts
 - Monthly sales reports with visual analytics
 - Supplier-wise sales breakdown
 - Revenue tracking in Kenyan Shillings (KES)
+- Accessory sales reports and trending
 
 Color Coding for Charts
 - Top Gas: Red
@@ -204,18 +214,21 @@ Usage Guide
 
 Pricing Reference (Kenyan Shillings)
 
-New Cylinders (with gas):
-- 6Kg: KES 3,200
-- 12Kg: KES 5,500
-
-Refills/Swaps (empty for full):
-- 6Kg: KES 2,000
-- 12Kg: KES 3,100
+Gas Cylinders:
+- 6Kg New (with gas): KES 3,200
+- 6Kg Refill: KES 1,200
+- 13Kg New (with gas): KES 5,500
+- 13Kg Refill: KES 2,600
 
 Accessories:
-- Burner: KES 750
-- Grill: KES 1,000
-- Pipe: KES 400
+- Grill: KES 350
+- Burner (Standard): KES 300
+- Burner (Medium): KES 350
+- Burner (Large): KES 450
+- Burner (Premium): KES 600
+- Regulator (6Kg cylinder): KES 500
+- Regulator (13Kg cylinder): KES 700
+- Hose Pipe (1.5M): KES 300
 
 Future Enhancements
 
