@@ -1,0 +1,20 @@
+[build]
+  command = "pip install -r requirements.txt && pip install python-dotenv"
+  publish = "app"
+
+[context.production]
+  environment = { FLASK_ENV = "production" }
+
+[functions]
+  directory = "functions"
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/*"
+  to = "/"
+  status = 200
+
+[dev]
+  command = "python run.py"
+  port = 5000
+  publish = "app"
