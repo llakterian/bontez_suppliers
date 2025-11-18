@@ -2,41 +2,22 @@
 
 {% block title %}Create Sale - Bontez Suppliers{% endblock %}
 
-{% block extra_css %}
-<style>
-    .item-row {
-        border: 1px solid #ddd;
-        padding: 10px;
-        margin: 10px 0;
-        background-color: #f9f9f9;
-    }
-    .remove-item-btn {
-        background-color: #dc3545;
-        color: white;
-        border: none;
-        padding: 5px 10px;
-        cursor: pointer;
-        border-radius: 3px;
-    }
-</style>
-{% endblock %}
-
 {% block content %}
 <h2>Create New Sale</h2>
 
 <form method="POST" class="form" id="saleForm">
-    <h3>Customer Information</h3>
+    <h3 style="color: var(--primary);">Customer Information</h3>
     <div class="form-group">
-        <label for="client_id">Client</label>
+        <label for="client_id">Select Client <span style="color: var(--danger);">*</span></label>
         <select id="client_id" name="client_id" required>
-            <option value="">-- Select Client --</option>
+            <option value="">-- Select a Client --</option>
             {% for client in clients %}
                 <option value="{{ client.id }}">{{ client.name }} ({{ client.phone }})</option>
             {% endfor %}
         </select>
     </div>
-    
-    <h3>Supplier Information</h3>
+
+    <h3 style="color: var(--primary); margin-top: 28px;">Supplier Information</h3>
     <div class="form-group">
         <label for="supplier_id">Primary Supplier (optional)</label>
         <select id="supplier_id" name="supplier_id">
@@ -46,51 +27,51 @@
             {% endfor %}
         </select>
     </div>
-    
-    <h3>Items</h3>
+
+    <h3 style="color: var(--primary); margin-top: 28px;">Items</h3>
     <div id="itemsContainer">
         <div class="item-row">
             <div class="form-group">
-                <label>Product</label>
-                <select name="item_product_id" class="item-product">
+                <label>Product <span style="color: var(--danger);">*</span></label>
+                <select name="item_product_id" class="item-product" required>
                     <option value="">-- Select Product --</option>
                     {% for product in products %}
                         <option value="{{ product.id }}" data-price="{{ product.price }}">
-                            {{ product.name }} - KES {{ "{:.2f}".format(product.price) }}
+                            {{ product.name }} - KES {{ "{:,.2f}".format(product.price) }}
                         </option>
                     {% endfor %}
                 </select>
             </div>
             <div class="form-group">
-                <label>Quantity</label>
-                <input type="number" name="item_quantity" value="1" min="1" class="item-quantity">
+                <label>Quantity <span style="color: var(--danger);">*</span></label>
+                <input type="number" name="item_quantity" value="1" min="1" class="item-quantity" required>
             </div>
-            <button type="button" class="remove-item-btn" onclick="removeItem(this)">Remove</button>
+            <button type="button" class="remove-item-btn" onclick="removeItem(this)" style="margin-top: 26px;">Remove</button>
         </div>
     </div>
-    <button type="button" class="btn btn-secondary" onclick="addItem()">Add Another Item</button>
-    
-    <h3>Payment Method</h3>
+    <button type="button" class="btn btn-secondary" onclick="addItem()" style="margin-top: 12px;">Add Another Item</button>
+
+    <h3 style="color: var(--primary); margin-top: 28px;">Payment Information</h3>
     <div class="form-group">
-        <label for="payment_method">Payment Method</label>
+        <label for="payment_method">Payment Method <span style="color: var(--danger);">*</span></label>
         <select id="payment_method" name="payment_method" required onchange="updatePaymentFields()">
             <option value="">-- Select Payment Method --</option>
             <option value="cash">Cash</option>
             <option value="mpesa">Mpesa</option>
-            <option value="installment">Installment</option>
+            <option value="installment">Installment Plan</option>
         </select>
     </div>
-    
+
     <div id="mpesaField" style="display:none;">
         <div class="form-group">
-            <label for="mpesa_code">Mpesa Transaction Code</label>
+            <label for="mpesa_code">Mpesa Transaction Code <span style="color: var(--danger);">*</span></label>
             <input type="text" id="mpesa_code" name="mpesa_code" placeholder="e.g. ABC123DEF">
         </div>
     </div>
-    
+
     <div id="installmentField" style="display:none;">
         <div class="form-group">
-            <label for="num_installments">Number of Installments</label>
+            <label for="num_installments">Number of Installments <span style="color: var(--danger);">*</span></label>
             <select id="num_installments" name="num_installments">
                 <option value="2">2 Installments</option>
                 <option value="3" selected>3 Installments</option>
@@ -99,12 +80,12 @@
             </select>
         </div>
     </div>
-    
+
     <div class="form-group">
         <label for="notes">Notes</label>
-        <textarea id="notes" name="notes" rows="3"></textarea>
+        <textarea id="notes" name="notes" placeholder="Any additional notes about this sale"></textarea>
     </div>
-    
+
     <div class="form-actions">
         <button type="submit" class="btn btn-primary">Create Sale</button>
         <a href="{{ url_for('sales.list_sales') }}" class="btn btn-secondary">Cancel</a>
@@ -118,21 +99,21 @@ function addItem() {
     newRow.className = 'item-row';
     newRow.innerHTML = `
         <div class="form-group">
-            <label>Product</label>
-            <select name="item_product_id" class="item-product">
+            <label>Product <span style="color: var(--danger);">*</span></label>
+            <select name="item_product_id" class="item-product" required>
                 <option value="">-- Select Product --</option>
                 {% for product in products %}
                     <option value="{{ product.id }}" data-price="{{ product.price }}">
-                        {{ product.name }} - KES {{ "{:.2f}".format(product.price) }}
+                        {{ product.name }} - KES {{ "{:,.2f}".format(product.price) }}
                     </option>
                 {% endfor %}
             </select>
         </div>
         <div class="form-group">
-            <label>Quantity</label>
-            <input type="number" name="item_quantity" value="1" min="1" class="item-quantity">
+            <label>Quantity <span style="color: var(--danger);">*</span></label>
+            <input type="number" name="item_quantity" value="1" min="1" class="item-quantity" required>
         </div>
-        <button type="button" class="remove-item-btn" onclick="removeItem(this)">Remove</button>
+        <button type="button" class="remove-item-btn" onclick="removeItem(this)" style="margin-top: 26px;">Remove</button>
     `;
     container.appendChild(newRow);
 }

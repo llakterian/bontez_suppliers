@@ -3,48 +3,58 @@
 {% block title %}Clients - Bontez Suppliers{% endblock %}
 
 {% block content %}
-<h2>Clients</h2>
-
-<div class="actions">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+    <h2>Clients Management</h2>
     <a href="{{ url_for('clients.create_client') }}" class="btn btn-primary">Add New Client</a>
 </div>
 
 {% if clients.items %}
-    <table class="data-table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Phone</th>
-                <th>Email</th>
-                <th>Address</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for client in clients.items %}
-            <tr>
-                <td>{{ client.name }}</td>
-                <td>{{ client.phone }}</td>
-                <td>{{ client.email or 'N/A' }}</td>
-                <td>{{ client.address or 'N/A' }}</td>
-                <td><a href="{{ url_for('clients.view_client', client_id=client.id) }}">View</a></td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    
+    <div style="overflow-x: auto;">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                    <th>Joined</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for client in clients.items %}
+                <tr>
+                    <td><strong>{{ client.name }}</strong></td>
+                    <td>{{ client.phone }}</td>
+                    <td>{{ client.email or '—' }}</td>
+                    <td>{{ client.address or '—' }}</td>
+                    <td>{{ client.created_at.strftime('%b %d, %Y') }}</td>
+                    <td><a href="{{ url_for('clients.view_client', client_id=client.id) }}">View</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if clients.pages > 1 %}
     <div class="pagination">
         {% if clients.has_prev %}
             <a href="{{ url_for('clients.list_clients', page=clients.prev_num) }}">Previous</a>
         {% endif %}
-        
-        Page {{ clients.page }} of {{ clients.pages }}
-        
+
+        <span style="padding: 10px 14px; color: #6c757d; font-weight: 500;">
+            Page {{ clients.page }} of {{ clients.pages }}
+        </span>
+
         {% if clients.has_next %}
             <a href="{{ url_for('clients.list_clients', page=clients.next_num) }}">Next</a>
         {% endif %}
     </div>
+    {% endif %}
 {% else %}
-    <p>No clients registered yet.</p>
+    <div style="text-align: center; padding: 60px 20px; background: white; border-radius: 12px;">
+        <p style="color: #6c757d; margin-bottom: 20px;">No clients registered yet.</p>
+        <a href="{{ url_for('clients.create_client') }}" class="btn btn-primary">Create First Client</a>
+    </div>
 {% endif %}
 {% endblock %}

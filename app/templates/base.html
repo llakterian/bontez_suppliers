@@ -3,18 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Bontez Suppliers - Gas Sales Management System for Kenya">
+    <meta name="theme-color" content="#0066cc">
     <title>{% block title %}Bontez Suppliers{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-    <nav class="navbar">
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
         <div class="container">
             <div class="logo">
+                <span class="logo-icon">B</span>
                 <h1>Bontez Suppliers</h1>
             </div>
             <ul class="nav-links">
-                <li><a href="{{ url_for('main.index') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('main.index') }}" aria-current="{% if request.endpoint == 'main.index' %}page{% endif %}">Dashboard</a></li>
                 <li><a href="{{ url_for('clients.list_clients') }}">Clients</a></li>
                 <li><a href="{{ url_for('suppliers.list_suppliers') }}">Suppliers</a></li>
                 <li><a href="{{ url_for('sales.list_sales') }}">Sales</a></li>
@@ -22,22 +27,24 @@
             </ul>
         </div>
     </nav>
-    
-    <div class="container main-content">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-        
-        {% block content %}{% endblock %}
-    </div>
-    
-    <footer class="footer">
+
+    <main>
+        <div class="container main-content">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}" role="alert">
+                            <span>{{ message }}</span>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <footer class="footer" role="contentinfo">
         <p>Bontez Suppliers Management System - Author: Llakterian</p>
     </footer>
 </body>

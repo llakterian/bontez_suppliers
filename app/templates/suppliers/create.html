@@ -3,19 +3,22 @@
 {% block title %}Create Supplier - Bontez Suppliers{% endblock %}
 
 {% block content %}
-<h2>Create New Supplier</h2>
+<h2>Add New Supplier</h2>
 
 <form method="POST" class="form">
+    <h3 style="margin-top: 0; color: var(--primary);">Supplier Details</h3>
+
     <div class="form-group">
-        <label for="name">Supplier Name</label>
-        <input type="text" id="name" name="name" required>
+        <label for="name">Supplier Name <span style="color: var(--danger);">*</span></label>
+        <input type="text" id="name" name="name" placeholder="e.g. Top Gas" required>
     </div>
-    
+
     <div class="form-group">
-        <label for="color">Color (for charts)</label>
+        <label for="color">Color Code (for charts) <span style="color: var(--danger);">*</span></label>
         <input type="text" id="color" name="color" placeholder="e.g. red, black, orange, green, brown, maroon, yellow, blue" required>
+        <p style="font-size: 12px; color: #6c757d; margin-top: 8px;">Used to identify this supplier in reports and charts</p>
     </div>
-    
+
     <div class="form-actions">
         <button type="submit" class="btn btn-primary">Create Supplier</button>
         <a href="{{ url_for('suppliers.list_suppliers') }}" class="btn btn-secondary">Cancel</a>

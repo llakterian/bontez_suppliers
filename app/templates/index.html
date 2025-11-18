@@ -3,12 +3,15 @@
 {% block title %}Dashboard - Bontez Suppliers{% endblock %}
 
 {% block content %}
-<h2>Dashboard</h2>
+<div style="margin-bottom: 40px;">
+    <h2>Dashboard Overview</h2>
+    <p style="color: #6c757d; margin-bottom: 30px;">Welcome to your Bontez Suppliers management system. Monitor your sales and client activity in real-time.</p>
+</div>
 
 <div class="dashboard-stats">
     <div class="stat-card">
         <h3>Total Sales</h3>
-        <p class="stat-value">KES {{ "{:.2f}".format(total_sales) }}</p>
+        <p class="stat-value">KES {{ "{:,.2f}".format(total_sales) }}</p>
     </div>
     <div class="stat-card">
         <h3>Total Clients</h3>
@@ -16,43 +19,57 @@
     </div>
     <div class="stat-card">
         <h3>Amount Paid</h3>
-        <p class="stat-value">KES {{ "{:.2f}".format(total_paid) }}</p>
+        <p class="stat-value">KES {{ "{:,.2f}".format(total_paid) }}</p>
     </div>
     <div class="stat-card">
         <h3>Pending Balance</h3>
-        <p class="stat-value">KES {{ "{:.2f}".format(pending_balance) }}</p>
+        <p class="stat-value">KES {{ "{:,.2f}".format(pending_balance) }}</p>
     </div>
 </div>
 
-<h3>Recent Sales</h3>
-{% if recent_sales %}
-    <table class="data-table">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Client</th>
-                <th>Supplier</th>
-                <th>Amount</th>
-                <th>Payment Method</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for sale in recent_sales %}
-            <tr>
-                <td>{{ sale.sale_date.strftime('%Y-%m-%d %H:%M') }}</td>
-                <td>{{ sale.client.name }}</td>
-                <td>{{ sale.supplier.name if sale.supplier else 'Mixed Gas' }}</td>
-                <td>KES {{ "{:.2f}".format(sale.total_amount) }}</td>
-                <td>{{ sale.payment_method }}</td>
-                <td><a href="{{ url_for('sales.view_sale', sale_id=sale.id) }}">View</a></td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-{% else %}
-    <p>No sales recorded yet.</p>
-{% endif %}
+<div style="margin-top: 40px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h3>Recent Sales Activity</h3>
+        <a href="{{ url_for('sales.list_sales') }}" style="color: var(--primary); text-decoration: none; font-weight: 500;">View All</a>
+    </div>
+
+    {% if recent_sales %}
+        <div style="overflow-x: auto;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Client</th>
+                        <th>Supplier</th>
+                        <th>Amount</th>
+                        <th>Payment Method</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sale in recent_sales %}
+                    <tr>
+                        <td>{{ sale.sale_date.strftime('%b %d, %Y %H:%M') }}</td>
+                        <td><strong>{{ sale.client.name }}</strong></td>
+                        <td>{{ sale.supplier.name if sale.supplier else 'Mixed Gas' }}</td>
+                        <td><strong>KES {{ "{:,.2f}".format(sale.total_amount) }}</strong></td>
+                        <td>
+                            <span style="padding: 4px 8px; background: var(--primary-light); color: var(--primary); border-radius: 4px; font-size: 12px; font-weight: 600;">
+                                {{ sale.payment_method.upper() }}
+                            </span>
+                        </td>
+                        <td><a href="{{ url_for('sales.view_sale', sale_id=sale.id) }}">View</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div style="text-align: center; padding: 40px; background: white; border-radius: 12px; color: #6c757d;">
+            <p>No sales recorded yet. Start by creating your first sale.</p>
+        </div>
+    {% endif %}
+</div>
 
 <div class="actions">
     <a href="{{ url_for('clients.create_client') }}" class="btn btn-primary">Add Client</a>
