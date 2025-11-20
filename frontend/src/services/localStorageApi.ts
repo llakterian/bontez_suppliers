@@ -222,13 +222,20 @@ export const localSalesApi = {
     return sales.find(s => s.id === id) || null;
   },
 
-  create: async (sale: Omit<Sale, 'id' | 'created_at'>): Promise<Sale> => {
+  create: async (sale: any): Promise<Sale> => {
     await delay();
     const sales = getStorageData<Sale>(STORAGE_KEYS.SALES);
     const newSale: Sale = {
-      ...sale,
       id: generateId(sales),
+      client_id: sale.client_id,
+      supplier_id: sale.supplier_id,
+      payment_method: sale.payment_method as 'cash' | 'mpesa' | 'installment',
+      mpesa_code: sale.mpesa_code,
+      total_amount: sale.total_amount || 0,
+      amount_paid: sale.amount_paid || 0,
+      notes: sale.notes,
       created_at: new Date().toISOString(),
+      sale_date: sale.sale_date || new Date().toISOString(),
     };
     sales.push(newSale);
     setStorageData(STORAGE_KEYS.SALES, sales);
@@ -271,6 +278,42 @@ export const localProductsApi = {
 
 // Reports API
 export const localReportsApi = {
+  getDailyReport: async (date?: string): Promise<any> => {
+    await delay();
+    const sales = getStorageData<Sale>(STORAGE_KEYS.SALES);
+    const targetDate = date || new Date().toISOString().split('T')[0];
+    const filteredSales = sales.filter(s => s.created_at.startsWith(targetDate));
+    
+    const totalSales = filteredSales.reduce((sum, s) => sum + (s.total_amount || 0), 0);
+    return {
+      total_sales: totalSales,
+      total_transactions: filteredSales.length,
+      sales: filteredSales,
+      date: targetDate,
+    };
+  },
+
+  getMonthlyReport: async (year?: number, month?: number): Promise<any> => {
+    await delay();
+    const sales = getStorageData<Sale>(STORAGE_KEYS.SALES);
+    const now = new Date();
+    const targetYear = year || now.getFullYear();
+    const targetMonth = month || now.getMonth() + 1;
+    
+    const filteredSales = sales.filter(s => {
+      const saleDate = new Date(s.created_at);
+      return saleDate.getFullYear() === targetYear && saleDate.getMonth() + 1 === targetMonth;
+    });
+    
+    const totalSales = filteredSales.reduce((sum, s) => sum + (s.total_amount || 0), 0);
+    return {
+      total_sales: totalSales,
+      total_transactions: filteredSales.length,
+      sales: filteredSales,
+      period: { year: targetYear, month: targetMonth },
+    };
+  },
+
   getSalesReport: async (filters: any): Promise<any> => {
     await delay();
     const sales = getStorageData<Sale>(STORAGE_KEYS.SALES);
@@ -314,6 +357,11 @@ export const localReportsApi = {
         to: filters.date_to || 'Now',
       },
     };
+  },
+
+  getCustomReport: async (filters: any): Promise<any> => {
+    // Same as getSalesReport for localStorage
+    return localReportsApi.getSalesReport(filters);
   },
 };
 

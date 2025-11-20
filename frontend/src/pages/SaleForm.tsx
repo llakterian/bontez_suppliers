@@ -123,9 +123,10 @@ export default function SaleForm() {
 
     try {
       setSubmitting(true);
+      const total = calculateTotal();
       const saleData = {
-        client_id: Number(formData.client_id),
-        supplier_id: formData.supplier_id ? Number(formData.supplier_id) : undefined,
+        client_id: formData.client_id,
+        supplier_id: formData.supplier_id || undefined,
         payment_method: formData.payment_method,
         mpesa_code: formData.payment_method === 'mpesa' ? formData.mpesa_code : undefined,
         num_installments: formData.payment_method === 'installment' ? formData.num_installments : undefined,
@@ -134,9 +135,12 @@ export default function SaleForm() {
           quantity: item.quantity,
         })),
         notes: formData.notes,
+        total_amount: total,
+        amount_paid: formData.payment_method === 'installment' ? 0 : total,
+        sale_date: new Date().toISOString(),
       };
 
-      await salesApi.create(saleData);
+      await salesApi.create(saleData as any);
       toast.success('Sale created successfully');
       navigate('/sales');
     } catch (error: any) {

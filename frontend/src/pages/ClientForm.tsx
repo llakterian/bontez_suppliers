@@ -33,6 +33,11 @@ export default function ClientForm() {
     try {
       setLoading(true);
       const client = await clientsApi.getById(clientId);
+      if (!client) {
+        toast.error('Client not found');
+        navigate('/clients');
+        return;
+      }
       setFormData({
         name: client.name,
         phone: client.phone,

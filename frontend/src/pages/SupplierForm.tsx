@@ -43,6 +43,11 @@ export default function SupplierForm() {
     try {
       setLoading(true);
       const supplier = await suppliersApi.getById(supplierId);
+      if (!supplier) {
+        toast.error('Supplier not found');
+        navigate('/suppliers');
+        return;
+      }
       setFormData({
         name: supplier.name,
         color: supplier.color,
