@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: bontez-suppliers
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn -w 2 -b 0.0.0.0:$PORT run:app"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: NODE_VERSION  
+        value: 18.17.0

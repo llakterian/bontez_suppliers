@@ -13,10 +13,10 @@ def create_app(config=None):
     """Create and configure Flask application."""
     app = Flask(__name__, static_folder='../frontend/dist', static_url_path='')
     
-    # Enable CORS for React frontend
+    # Enable CORS for React frontend (allow all origins in production since React is served by Flask)
     CORS(app, resources={
         r"/api/*": {
-            "origins": ["http://localhost:5173", "http://127.0.0.1:5173"],
+            "origins": "*",
             "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
             "allow_headers": ["Content-Type", "Authorization"]
         }
