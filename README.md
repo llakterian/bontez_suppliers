@@ -371,7 +371,19 @@ Charts Not Displaying
 
 Support & Contribution
 
-For issues, questions, or contributions, please contact the development team at Bontez Suppliers.
+For issues, questions,
+
+## Author & Contact
+
+**Built by Llakterian**
+
+For inquiries, support, or custom development:
+- Email: [llakterian@gmail.com](mailto:llakterian@gmail.com)
+- Subject: "Bontez Suppliers - [Your Request]"
+
+## Contributing
+
+Contributions are welcome! Please contact Llakterian at llakterian@gmail.com for collaboration opportunities.
 
 License
 

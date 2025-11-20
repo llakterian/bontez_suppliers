@@ -107,4 +107,4 @@ See RENDER_DEPLOYMENT.md for 10-minute setup.
 
 ---
 Author: Llakterian
-Date: November 18, 2025
+Date: November 20, 2025

@@ -1,6 +1,6 @@
 QUICK SETUP GUIDE - BONTEZ SUPPLIERS
 Author: Llakterian
-Date: November 18, 2025
+Date: November 20, 2025
 
 FOR CLIENTS: GET THE APP RUNNING IN 5 MINUTES
 ==============================================

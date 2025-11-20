@@ -1,0 +1,244 @@
+╔══════════════════════════════════════════════════════════════╗
+║         BONTEZ SUPPLIERS - DEPLOYMENT CHECKLIST              ║
+║                 Complete Before Deploying                    ║
+╚══════════════════════════════════════════════════════════════╝
+
+📋 PRE-DEPLOYMENT CHECKS
+═══════════════════════════════════════════════════════════════
+
+BACKEND (Flask)
+[ ] All dependencies in requirements.txt
+[ ] Database migrations run successfully
+[ ] SECRET_KEY will be set on Render
+[ ] FLASK_DEBUG=0 for production
+[ ] CORS configured properly
+[ ] All API endpoints tested locally
+[ ] No hardcoded secrets in code
+
+FRONTEND (React)
+[ ] npm run build works without errors
+[ ] All TypeScript errors resolved
+[ ] Environment variables configured
+[ ] API_BASE_URL set correctly
+[ ] Routes tested (/, /reports, /sales, etc.)
+[ ] Charts render properly
+[ ] Mobile responsive checked
+[ ] Dark mode working
+
+CODE QUALITY
+[ ] No console.log() in production code
+[ ] Removed all TODO comments
+[ ] Linter passes (npm run lint)
+[ ] Type checking passes (tsc -b)
+[ ] Git repo clean (no uncommitted changes)
+[ ] .gitignore includes node_modules, venv, .env
+
+═══════════════════════════════════════════════════════════════
+🚀 DEPLOYMENT STEPS
+═══════════════════════════════════════════════════════════════
+
+OPTION 1: SINGLE DEPLOYMENT (Recommended)
+──────────────────────────────────────────
+
+Step 1: Commit All Changes
+[ ] git add -A
+[ ] git commit -m "Production ready: Flask + React"
+[ ] git push origin main
+
+Step 2: Configure Render.com
+[ ] Create account at render.com
+[ ] Connect GitHub repository
+[ ] Select "Web Service"
+[ ] Configure settings:
+    Build Command: ./build.sh
+    Start Command: gunicorn -w 2 -b 0.0.0.0:$PORT run:app
+    Environment: Python 3
+    Plan: Free
+
+Step 3: Environment Variables
+[ ] FLASK_ENV = production
+[ ] FLASK_DEBUG = 0
+[ ] SECRET_KEY = <generate-secure-key>
+    Generate with: python -c "import secrets; print(secrets.token_hex(32))"
+
+Step 4: Deploy
+[ ] Click "Create Web Service"
+[ ] Wait 10-15 minutes for build
+[ ] Check logs for errors
+[ ] Note your live URL
+
+Step 5: Test Deployment
+[ ] Visit https://your-app.onrender.com
+[ ] Test all routes
+[ ] Test API endpoints
+[ ] Test on mobile
+[ ] Test in different browsers
+
+═══════════════════════════════════════════════════════════════
+
+OPTION 2: SEPARATE DEPLOYMENTS (Advanced)
+──────────────────────────────────────────
+
+Backend (Render)
+[ ] Update Procfile (remove npm build commands)
+[ ] Deploy Flask-only to Render
+[ ] Note backend URL: https://api.onrender.com
+[ ] Test API endpoints directly
+
+Frontend (Netlify)
+[ ] Update frontend/.env.production with backend URL
+[ ] Build locally: cd frontend && npm run build
+[ ] Deploy to Netlify:
+    - Via dashboard: Import from GitHub
+    - Via CLI: netlify deploy --prod
+[ ] Configure environment variables on Netlify
+[ ] Note frontend URL: https://app.netlify.app
+
+CORS Configuration
+[ ] Update app/__init__.py with Netlify URL in CORS origins
+[ ] Redeploy backend
+[ ] Test CORS from frontend
+
+═══════════════════════════════════════════════════════════════
+🧪 POST-DEPLOYMENT TESTING
+═══════════════════════════════════════════════════════════════
+
+Functional Tests
+[ ] Homepage loads without errors
+[ ] Dashboard displays correctly
+[ ] Navigate to Clients page
+[ ] Navigate to Suppliers page  
+[ ] Navigate to Sales page
+[ ] Navigate to Reports page
+[ ] Create new sale workflow
+[ ] Generate PDF report
+[ ] Export CSV report
+[ ] Upload file (if feature exists)
+[ ] Form validation works
+[ ] Error messages display
+
+Performance Tests
+[ ] First load < 5 seconds
+[ ] Navigation feels instant
+[ ] Charts load smoothly
+[ ] Images load properly
+[ ] No console errors
+[ ] Network tab shows correct API calls
+
+Responsive Tests
+[ ] Desktop (1920x1080)
+[ ] Laptop (1366x768)
+[ ] Tablet (768x1024)
+[ ] Mobile (375x667)
+[ ] Portrait mode
+[ ] Landscape mode
+
+Browser Tests
+[ ] Chrome
+[ ] Firefox
+[ ] Safari
+[ ] Edge
+[ ] Mobile Chrome
+[ ] Mobile Safari
+
+API Tests
+[ ] GET /api/clients
+[ ] GET /api/suppliers
+[ ] GET /api/sales
+[ ] GET /api/products
+[ ] GET /api/reports/sales
+[ ] POST /api/sales/create
+[ ] All endpoints return JSON
+[ ] Authentication works (if enabled)
+
+═══════════════════════════════════════════════════════════════
+🔐 SECURITY CHECKS
+═══════════════════════════════════════════════════════════════
+
+[ ] HTTPS enabled (automatic on Render/Netlify)
+[ ] SECRET_KEY is strong and unique
+[ ] FLASK_DEBUG=0 in production
+[ ] No API keys in client-side code
+[ ] CORS properly restricted
+[ ] SQL injection prevention (SQLAlchemy handles this)
+[ ] XSS prevention (React handles this)
+[ ] Environment variables not in git
+[ ] .env files in .gitignore
+
+═══════════════════════════════════════════════════════════════
+📊 MONITORING SETUP
+═══════════════════════════════════════════════════════════════
+
+Render Dashboard
+[ ] Enable email notifications
+[ ] Set up deploy webhooks (optional)
+[ ] Monitor resource usage
+[ ] Check logs regularly
+
+Netlify Dashboard (if Option 2)
+[ ] Enable deploy notifications
+[ ] Set up form handling (if needed)
+[ ] Monitor bandwidth usage
+[ ] Enable analytics (optional)
+
+═══════════════════════════════════════════════════════════════
+🎉 LAUNCH CHECKLIST
+═══════════════════════════════════════════════════════════════
+
+[ ] All tests passed
+[ ] No critical bugs
+[ ] Performance acceptable
+[ ] Security measures in place
+[ ] Monitoring configured
+[ ] Documentation updated
+[ ] README has live URL
+[ ] Shared with stakeholders
+[ ] Backup plan ready
+[ ] Support channels established
+
+═══════════════════════════════════════════════════════════════
+📝 POST-LAUNCH
+═══════════════════════════════════════════════════════════════
+
+[ ] Document any issues found
+[ ] Plan for future updates
+[ ] Set up regular backups
+[ ] Schedule maintenance windows
+[ ] Create changelog for updates
+[ ] Gather user feedback
+[ ] Monitor error rates
+[ ] Track performance metrics
+
+═══════════════════════════════════════════════════════════════
+🔄 ONGOING MAINTENANCE
+═══════════════════════════════════════════════════════════════
+
+Weekly
+[ ] Check error logs
+[ ] Monitor performance
+[ ] Review user feedback
+[ ] Update dependencies (if needed)
+
+Monthly
+[ ] Review analytics
+[ ] Update documentation
+[ ] Plan new features
+[ ] Security audit
+
+═══════════════════════════════════════════════════════════════
+
+✅ DEPLOYMENT COMPLETE!
+
+Live URL: _________________________________
+
+Backend URL: _________________________________
+
+Deployed by: ________________  Date: __________
+
+Notes:
+___________________________________________________
+___________________________________________________
+___________________________________________________
+___________________________________________________
+
+═══════════════════════════════════════════════════════════════

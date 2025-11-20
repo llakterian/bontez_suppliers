@@ -9,10 +9,11 @@ from datetime import datetime, timedelta
 from sqlalchemy import func, extract
 
 main_bp = Blueprint('main', __name__)
-clients_bp = Blueprint('clients', __name__, url_prefix='/clients')
-suppliers_bp = Blueprint('suppliers', __name__, url_prefix='/suppliers')
-sales_bp = Blueprint('sales', __name__, url_prefix='/sales')
-reports_bp = Blueprint('reports', __name__, url_prefix='/reports')
+clients_bp = Blueprint('clients', __name__, url_prefix='/api/clients')
+suppliers_bp = Blueprint('suppliers', __name__, url_prefix='/api/suppliers')
+sales_bp = Blueprint('sales', __name__, url_prefix='/api/sales')
+reports_bp = Blueprint('reports', __name__, url_prefix='/api/reports')
+products_bp = Blueprint('products', __name__, url_prefix='/api/products')
 accessories_bp = Blueprint('accessories', __name__, url_prefix='/accessories')
 
 
@@ -34,10 +35,70 @@ def index():
                          recent_sales=recent_sales)
 
 
+@main_bp.route('/api/dashboard')
+def dashboard_api():
+    """API endpoint for dashboard data."""
+    total_sales = db.session.query(func.sum(Sale.total_amount)).scalar() or 0
+    total_clients = db.session.query(func.count(Client.id)).scalar() or 0
+    total_paid = db.session.query(func.sum(Sale.amount_paid)).scalar() or 0
+    pending_balance = total_sales - total_paid
+    
+    recent_sales = Sale.query.order_by(Sale.created_at.desc()).limit(10).all()
+    
+    return jsonify({
+        'stats': {
+            'total_sales': float(total_sales),
+            'total_clients': total_clients,
+            'total_paid': float(total_paid),
+            'pending_balance': float(pending_balance)
+        },
+        'recent_sales': [{
+            'id': sale.id,
+            'client_id': sale.client_id,
+            'supplier_id': sale.supplier_id,
+            'payment_method': sale.payment_method,
+            'total_amount': float(sale.total_amount),
+            'amount_paid': float(sale.amount_paid),
+            'created_at': sale.created_at.isoformat() if sale.created_at else None,
+            'sale_date': sale.sale_date.isoformat() if sale.sale_date else None,
+            'client': {
+                'id': sale.client.id,
+                'name': sale.client.name,
+                'phone': sale.client.phone
+            } if sale.client else None,
+            'supplier': {
+                'id': sale.supplier.id,
+                'name': sale.supplier.name,
+                'color': sale.supplier.color
+            } if sale.supplier else None
+        } for sale in recent_sales]
+    })
+
+
 @clients_bp.route('/')
 def list_clients():
-    """List all clients."""
+    """API endpoint for listing clients."""
     page = request.args.get('page', 1, type=int)
+    limit = request.args.get('limit', 20, type=int)
+    
+    # Check if request wants JSON
+    if request.accept_mimetypes.accept_json and not request.accept_mimetypes.accept_html:
+        clients = Client.query.paginate(page=page, per_page=limit, error_out=False)
+        return jsonify({
+            'clients': [{
+                'id': c.id,
+                'name': c.name,
+                'phone': c.phone,
+                'email': c.email,
+                'address': c.address,
+                'created_at': c.created_at.isoformat() if c.created_at else None
+            } for c in clients.items],
+            'total': clients.total,
+            'page': clients.page,
+            'pages': clients.pages
+        })
+    
+    # Default HTML response
     clients = Client.query.paginate(page=page, per_page=20)
     return render_template('clients/list.html', clients=clients)
 
@@ -74,7 +135,20 @@ def view_client(client_id):
 
 @suppliers_bp.route('/')
 def list_suppliers():
-    """List all suppliers."""
+    """API endpoint for listing suppliers."""
+    # Check if request wants JSON
+    if request.accept_mimetypes.accept_json and not request.accept_mimetypes.accept_html:
+        suppliers = Supplier.query.all()
+        return jsonify({
+            'suppliers': [{
+                'id': s.id,
+                'name': s.name,
+                'color': s.color,
+                'created_at': s.created_at.isoformat() if s.created_at else None
+            } for s in suppliers]
+        })
+    
+    # Default HTML response
     suppliers = Supplier.query.all()
     return render_template('suppliers/list.html', suppliers=suppliers)
 
@@ -95,10 +169,71 @@ def create_supplier():
     return render_template('suppliers/create.html')
 
 
+# ============= PRODUCTS ROUTES =============
+
+@products_bp.route('/')
+def list_products():
+    """API endpoint for listing products."""
+    supplier_id = request.args.get('supplier_id', type=int)
+    
+    query = Product.query
+    if supplier_id:
+        query = query.filter_by(supplier_id=supplier_id)
+    
+    products = query.all()
+    return jsonify({
+        'products': [{
+            'id': p.id,
+            'name': p.name,
+            'supplier_id': p.supplier_id,
+            'category': p.category,
+            'price': float(p.price),
+            'description': p.description,
+            'created_at': p.created_at.isoformat() if p.created_at else None
+        } for p in products]
+    })
+
+
+# ============= SALES ROUTES =============
+
 @sales_bp.route('/')
 def list_sales():
-    """List all sales."""
+    """API endpoint for listing sales."""
     page = request.args.get('page', 1, type=int)
+    limit = request.args.get('limit', 20, type=int)
+    
+    # Check if request wants JSON
+    if request.accept_mimetypes.accept_json and not request.accept_mimetypes.accept_html:
+        sales = Sale.query.paginate(page=page, per_page=limit, error_out=False)
+        return jsonify({
+            'sales': [{
+                'id': s.id,
+                'client_id': s.client_id,
+                'supplier_id': s.supplier_id,
+                'payment_method': s.payment_method,
+                'mpesa_code': s.mpesa_code,
+                'total_amount': float(s.total_amount),
+                'amount_paid': float(s.amount_paid),
+                'notes': s.notes,
+                'created_at': s.created_at.isoformat() if s.created_at else None,
+                'sale_date': s.sale_date.isoformat() if s.sale_date else None,
+                'client': {
+                    'id': s.client.id,
+                    'name': s.client.name,
+                    'phone': s.client.phone
+                } if s.client else None,
+                'supplier': {
+                    'id': s.supplier.id,
+                    'name': s.supplier.name,
+                    'color': s.supplier.color
+                } if s.supplier else None
+            } for s in sales.items],
+            'total': sales.total,
+            'page': sales.page,
+            'pages': sales.pages
+        })
+    
+    # Default HTML response
     sales = Sale.query.paginate(page=page, per_page=20)
     return render_template('sales/list.html', sales=sales)
 
@@ -246,33 +381,152 @@ def monthly_data():
     year = request.args.get('year', datetime.utcnow().year, type=int)
     month = request.args.get('month', datetime.utcnow().month, type=int)
     
-    sales = Sale.query.filter(
-        extract('year', Sale.sale_date) == year,
-        extract('month', Sale.sale_date) == month
-    ).all()
+    start_date = datetime(year, month, 1)
+    if month == 12:
+        end_date = datetime(year + 1, 1, 1)
+    else:
+        end_date = datetime(year, month + 1, 1)
     
-    supplier_sales = {}
+    sales = Sale.query.filter(Sale.sale_date >= start_date, Sale.sale_date < end_date).all()
+    
+    supplier_data = {}
+    labels = []
+    colors = []
+    
     for sale in sales:
-        supplier_name = sale.supplier.name if sale.supplier else 'Mixed Gas'
-        if supplier_name not in supplier_sales:
-            supplier_sales[supplier_name] = 0
-        supplier_sales[supplier_name] += sale.total_amount
+        if sale.supplier:
+            supplier_name = sale.supplier.name
+            if supplier_name not in supplier_data:
+                supplier_data[supplier_name] = 0
+                labels.append(supplier_name)
+                colors.append(sale.supplier.color or '#6b7280')
+            supplier_data[supplier_name] += float(sale.total_amount)
     
-    suppliers_all = Supplier.query.all()
-    color_map = {s.name: s.color for s in suppliers_all}
-    color_map['Mixed Gas'] = 'purple'
-    
-    labels = list(supplier_sales.keys())
-    data = list(supplier_sales.values())
-    colors = [color_map.get(label, 'gray') for label in labels]
-    
-    total_revenue = sum(data)
+    data = [supplier_data.get(label, 0) for label in labels]
     
     return jsonify({
         'labels': labels,
         'data': data,
-        'colors': colors,
-        'total_revenue': total_revenue
+        'colors': colors
+    })
+
+
+@reports_bp.route('/sales')
+def sales_report():
+    """Enhanced API endpoint for comprehensive sales reports."""
+    date_from_str = request.args.get('date_from')
+    date_to_str = request.args.get('date_to')
+    supplier_id = request.args.get('supplier_id', type=int)
+    
+    # Default to last 30 days if no dates provided
+    if not date_to_str:
+        date_to = datetime.utcnow().date()
+    else:
+        date_to = datetime.strptime(date_to_str, '%Y-%m-%d').date()
+    
+    if not date_from_str:
+        date_from = date_to - timedelta(days=30)
+    else:
+        date_from = datetime.strptime(date_from_str, '%Y-%m-%d').date()
+    
+    # Build query
+    query = Sale.query.filter(
+        Sale.sale_date >= date_from,
+        Sale.sale_date <= date_to
+    )
+    
+    if supplier_id:
+        query = query.filter(Sale.supplier_id == supplier_id)
+    
+    sales = query.all()
+    
+    # Calculate metrics
+    total_sales = len(sales)
+    total_revenue = sum(float(sale.total_amount) for sale in sales)
+    average_sale = total_revenue / total_sales if total_sales > 0 else 0
+    
+    # YoY Growth calculation
+    try:
+        last_year_from = date_from.replace(year=date_from.year - 1)
+        last_year_to = date_to.replace(year=date_to.year - 1)
+        last_year_sales = Sale.query.filter(
+            Sale.sale_date >= last_year_from,
+            Sale.sale_date <= last_year_to
+        ).all()
+        last_year_revenue = sum(float(sale.total_amount) for sale in last_year_sales)
+        yoy_growth = ((total_revenue - last_year_revenue) / last_year_revenue * 100) if last_year_revenue > 0 else 0
+    except:
+        yoy_growth = 0
+    
+    # Sales by supplier
+    sales_by_supplier = {}
+    for sale in sales:
+        if sale.supplier:
+            supplier_name = sale.supplier.name
+            sales_by_supplier[supplier_name] = sales_by_supplier.get(supplier_name, 0) + float(sale.total_amount)
+    
+    # Sales by payment method
+    sales_by_payment_method = {}
+    for sale in sales:
+        method = sale.payment_method
+        sales_by_payment_method[method] = sales_by_payment_method.get(method, 0) + float(sale.total_amount)
+    
+    # Sales by product type
+    sales_by_product_type = {
+        '6Kg New': 0, '6Kg Refill': 0, '12Kg New': 0, '12Kg Refill': 0, 'Accessories': 0
+    }
+    
+    for sale in sales:
+        for item in sale.items:
+            if item.product:
+                product_name = item.product.name.lower()
+                if '6kg' in product_name and 'new' in product_name:
+                    sales_by_product_type['6Kg New'] += float(item.subtotal)
+                elif '6kg' in product_name:
+                    sales_by_product_type['6Kg Refill'] += float(item.subtotal)
+                elif '12kg' in product_name and 'new' in product_name:
+                    sales_by_product_type['12Kg New'] += float(item.subtotal)
+                elif '12kg' in product_name:
+                    sales_by_product_type['12Kg Refill'] += float(item.subtotal)
+                else:
+                    sales_by_product_type['Accessories'] += float(item.subtotal)
+    
+    # Daily sales trend
+    daily_sales = {}
+    for sale in sales:
+        date_key = sale.sale_date.isoformat()
+        if date_key not in daily_sales:
+            daily_sales[date_key] = {'amount': 0, 'count': 0}
+        daily_sales[date_key]['amount'] += float(sale.total_amount)
+        daily_sales[date_key]['count'] += 1
+    
+    daily_sales_list = [
+        {'date': date, 'amount': data['amount'], 'count': data['count']}
+        for date, data in sorted(daily_sales.items())
+    ]
+    
+    # Top clients
+    client_totals = {}
+    for sale in sales:
+        if sale.client:
+            client_name = sale.client.name
+            client_totals[client_name] = client_totals.get(client_name, 0) + float(sale.total_amount)
+    
+    top_clients = [
+        {'name': name, 'total': total}
+        for name, total in sorted(client_totals.items(), key=lambda x: x[1], reverse=True)[:10]
+    ]
+    
+    return jsonify({
+        'total_sales': total_sales,
+        'total_revenue': total_revenue,
+        'average_sale': average_sale,
+        'yoy_growth': yoy_growth,
+        'sales_by_supplier': sales_by_supplier,
+        'sales_by_payment_method': sales_by_payment_method,
+        'sales_by_product_type': sales_by_product_type,
+        'daily_sales': daily_sales_list,
+        'top_clients': top_clients,
     })
 
 
