@@ -8,13 +8,18 @@ import type {
   SalesReport,
   ReportFilters
 } from '../types';
+import { localStorageApi } from './localStorageApi';
 
-// Configure axios instance
+// Detect if we should use localStorage (Netlify deployment) or real backend
+const USE_LOCAL_STORAGE = import.meta.env.VITE_USE_LOCAL_STORAGE === 'true' || 
+  import.meta.env.VITE_API_URL === 'mock';
+
+// Configure axios instance (only used when NOT using localStorage)
 const API_BASE_URL = import.meta.env.VITE_API_URL || 
   (import.meta.env.MODE === 'production' ? '/api' : 'http://localhost:5000/api');
 
 const api = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: API_BASE_URL !== 'mock' ? API_BASE_URL : 'http://localhost:5000/api',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -43,6 +48,10 @@ api.interceptors.response.use(
   }
 );
 
+// Log which API mode we're using
+console.log(`API Mode: ${USE_LOCAL_STORAGE ? 'LocalStorage (Netlify)' : 'Backend API'}`);
+console.log(`Environment: ${import.meta.env.MODE}`);
+
 // Dashboard API
 export const dashboardApi = {
   getStats: (): Promise<DashboardData> =>
@@ -50,9 +59,11 @@ export const dashboardApi = {
 };
 
 // Clients API
-export const clientsApi = {
-  getAll: (page = 1, limit = 20): Promise<{ clients: Client[]; total: number }> =>
-    api.get(`/clients?page=${page}&limit=${limit}`).then(res => res.data),
+export const clientsApi = USE_LOCAL_STORAGE ? localStorageApi.clients : {
+  getAll: async (page = 1, limit = 20): Promise<{ clients: Client[]; total: number }> => {
+    const res = await api.get(`/clients?page=${page}&limit=${limit}`);
+    return res.data;
+  },
 
   getById: (id: number): Promise<Client> =>
     api.get(`/clients/${id}`).then(res => res.data),
@@ -68,7 +79,7 @@ export const clientsApi = {
 };
 
 // Suppliers API
-export const suppliersApi = {
+export const suppliersApi = USE_LOCAL_STORAGE ? localStorageApi.suppliers : {
   getAll: (): Promise<Supplier[]> =>
     api.get('/suppliers').then(res => res.data),
 
@@ -86,7 +97,7 @@ export const suppliersApi = {
 };
 
 // Products API
-export const productsApi = {
+export const productsApi = USE_LOCAL_STORAGE ? localStorageApi.products : {
   getAll: (): Promise<Product[]> =>
     api.get('/products').then(res => res.data),
 
@@ -97,8 +108,8 @@ export const productsApi = {
     api.get(`/products?category=${category}`).then(res => res.data),
 };
 
-// Sales API
-export const salesApi = {
+// Sales API  
+export const salesApi = USE_LOCAL_STORAGE ? localStorageApi.sales : {
   getAll: (page = 1, limit = 20): Promise<{ sales: Sale[]; total: number }> =>
     api.get(`/sales?page=${page}&limit=${limit}`).then(res => res.data),
 
@@ -124,7 +135,7 @@ export const salesApi = {
 };
 
 // Reports API
-export const reportsApi = {
+export const reportsApi = USE_LOCAL_STORAGE ? localStorageApi.reports : {
   getDailyReport: (date?: string): Promise<SalesReport> =>
     api.get(`/reports/daily${date ? `?date=${date}` : ''}`).then(res => res.data),
 

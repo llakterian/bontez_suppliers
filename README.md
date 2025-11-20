@@ -279,15 +279,11 @@ Future Enhancements
 
 Production Deployment
 
-Two deployment options are available:
+**Current**: Netlify (localStorage for testing)
 
-OPTION 1: Deploy to Render.com (RECOMMENDED)
-============================================
-Render offers free tier hosting for Flask applications. Perfect for client demos and production.
-
-Quick Start (10 minutes):
-1. Read: RENDER_DEPLOYMENT.md
-2. Sign up at https://render.com (use GitHub)
+For deployment instructions, see:
+- **[Netlify Deployment Guide](NETLIFY_DEPLOYMENT.md)** - Current deployment method
+- [Deployment Info](DEPLOYMENT_INFO.md) - Overview of all deployment options
 3. Follow step-by-step guide
 4. Share live URL with clients
 
