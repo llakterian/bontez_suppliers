@@ -1,12 +1,12 @@
-**Bontez Suppliers**- Gas Sales Management System
+**Bontez Suppliers** - Gas Sales Management System
 
-Author: Llakterian
+**Author**: Llakterian
 
-Overview
+**Overview**
 
 Bontez Suppliers is a comprehensive gas sales management system designed for a Kenyan gas distribution company. The system allows tracking of clients, suppliers, sales transactions, and provides detailed reporting with visual charts and analytics.
 
-Features
+**Features**
 
 Dashboard
 - Overview of total sales, clients, and pending balances
@@ -60,7 +60,7 @@ Color Coding for Charts
 - Hass Gas: Blue
 - Mixed Gas: Purple
 
-Installation
+**Installation**
 
 Prerequisites
 - Python 3.7 or higher
@@ -93,7 +93,7 @@ Steps
 7. Open your browser and navigate to:
    http://127.0.0.1:5000
 
-Project Structure
+**Project Structure**
 
 bontez_suppliers/
     app/
@@ -127,7 +127,7 @@ bontez_suppliers/
     requirements.txt             - Python dependencies
     README.md                    - This file
 
-Database Schema
+**Database Schema**
 
 Suppliers Table
 - id (Primary Key)
@@ -181,7 +181,7 @@ Installments Table
 - is_paid (Boolean)
 - created_at (DateTime)
 
-Usage Guide
+**Usage Guide**
 
 1. Adding Suppliers
    - Navigate to Suppliers -> Add New Supplier
@@ -212,7 +212,7 @@ Usage Guide
    - Daily Report: Shows sales for a specific date with charts
    - Monthly Report: Shows aggregated sales for a month with supplier breakdown
 
-Pricing Reference (Kenyan Shillings)
+**Pricing Reference (Kenyan Shillings)**
 
 Gas Cylinders:
 - 6Kg New (with gas): KES 3,200
