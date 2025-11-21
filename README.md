@@ -279,32 +279,38 @@ Future Enhancements
 
 Production Deployment
 
-**Current**: Netlify (localStorage for testing)
+**Current**: Netlify (localStorage-based)
+**Live URL**: https://bontez-suppliers.netlify.app
 
 For deployment instructions, see:
 - **[Netlify Deployment Guide](NETLIFY_DEPLOYMENT.md)** - Current deployment method
+- [Contact Picker Update](CONTACT_PICKER_UPDATE.md) - Latest features and deployment
 - [Deployment Info](DEPLOYMENT_INFO.md) - Overview of all deployment options
-3. Follow step-by-step guide
-4. Share live URL with clients
 
 Benefits:
-✓ Free tier available
+✓ Free tier with generous limits
 ✓ Auto-deploy on GitHub push
 ✓ Custom domains supported
-✓ Always-on (no cold starts on paid tier)
-✓ Full database support
-✓ Easy scaling
+✓ Always-on with no cold starts
+✓ LocalStorage for data persistence
+✓ Perfect for mobile testing
+✓ PWA support
+✓ HTTPS/SSL included
 
-Your app will be live at:
-https://bontez-suppliers.onrender.com
+Quick Deploy:
+1. Code pushed to GitHub automatically triggers Netlify rebuild
+2. Build completes in ~3 minutes
+3. Live at https://bontez-suppliers.netlify.app
 
 OPTION 2: Deploy to Alternative Platforms
 ==========================================
-Other free/low-cost options:
+Other platforms for production deployment:
 
-- Fly.io: Free tier with some limitations
+- Vercel: Similar to Netlify, great for React apps
+- Firebase Hosting: Google's platform with generous free tier
+- GitHub Pages: Free static hosting (frontend only)
+- Fly.io: Full-stack hosting with free tier
 - Railway: Simple deployment, pay-as-you-go
-- Replit: Quick prototyping
 
 See: DEPLOYMENT_GUIDE.md for detailed instructions
 

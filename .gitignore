@@ -30,3 +30,6 @@ instance/
 
 uploads/
 bontez_suppliers.db
+
+# Local Netlify folder
+.netlify

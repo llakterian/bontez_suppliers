@@ -76,33 +76,33 @@ Bontez Suppliers helps you:
 3 WAYS TO GET STARTED
 =====================
 
-OPTION 1: Deploy to Render (Recommended)
-Time: 5 minutes
+OPTION 1: Deploy to Netlify (Current & Recommended)
+Time: 3 minutes
 Cost: Free (generous tier)
-Result: Live at https://bontez-suppliers.onrender.com
+Result: Live at https://bontez-suppliers.netlify.app
 
 Steps:
-1. Create account at https://render.com/
-2. Connect GitHub
-3. Deploy
+1. Already deployed and live!
+2. Auto-deploys on GitHub push
+3. Mobile contact picker enabled
 4. Share live URL with clients
 
 See: QUICK_DEPLOY.md for step-by-step guide
 
-OPTION 2: Deploy to Netlify (Fast)
-Time: 3 minutes
-Cost: Free (100 hours/month)
-Result: Live at https://bontez-suppliers.netlify.app
+OPTION 2: Local Development & Testing
+Time: 5 minutes
+Cost: Free
+Result: Running locally at http://localhost:5173
 
 Steps:
-1. Go to https://app.netlify.com/
-2. Sign in with GitHub
-3. Connect repository
-4. Deploy
+1. Clone repository
+2. cd frontend && npm install
+3. npm run dev
+4. Open http://localhost:5173
 
-See: DEPLOYMENT_README.md for details
+See: QUICK_START.md for details
 
-OPTION 3: Run Locally (Development)
+OPTION 3: Run Backend Locally (Full-Stack Development)
 Time: 5 minutes
 Cost: Free
 Result: Running on http://127.0.0.1:5000
@@ -117,26 +117,23 @@ Steps:
 7. Open: http://127.0.0.1:5000
 
 
-DEPLOY IN 5 MINUTES
-===================
+ALREADY DEPLOYED & LIVE!
+========================
 
-1. Go to https://render.com/
-2. Click "Sign Up" → "Continue with GitHub"
-3. Create account and sign in
-4. In dashboard: "New +" → "Web Service"
-5. Click "Connect a repository"
-6. Find "bontez_suppliers" → "Connect"
-7. Configure:
-   - Name: bontez-suppliers
-   - Region: Your region
-   - Branch: main
-   - Runtime: Python 3
-   - Build Command: pip install -r requirements.txt
-   - Start Command: gunicorn -w 2 -b 0.0.0.0:$PORT run:app
-8. Click "Create Web Service"
-9. Wait 2-3 minutes
-10. Get live URL: https://bontez-suppliers.onrender.com
-11. Share with clients!
+The app is currently live at: https://bontez-suppliers.netlify.app
+
+Auto-Deploy Setup (Already Configured):
+1. Push code to GitHub main branch
+2. Netlify automatically detects changes
+3. Builds and deploys in ~3 minutes
+4. New version is live!
+
+Latest Features:
+✓ Mobile contact picker integration
+✓ All 11 major Kenyan gas suppliers included
+✓ Auto-deploys on every GitHub push
+✓ LocalStorage for data persistence
+✓ Works offline on mobile devices
 
 Done! Your app is live and shareable.
 
@@ -269,11 +266,10 @@ Essential Guides:
 - PROJECT_OVERVIEW.md - Complete specs
 
 Deployment Guides:
-- DEPLOYMENT_README.md - GitHub deployment
+- NETLIFY_DEPLOYMENT.md - Netlify deployment guide
+- CONTACT_PICKER_UPDATE.md - Latest features
 - DEPLOYMENT.md - All deployment options
-- Procfile - Render configuration
 - netlify.toml - Netlify configuration
-- runtime.txt - Python version
 - .env.example - Environment template
 
 Technical Guides:
@@ -331,20 +327,17 @@ Use this data to:
 DEPLOYMENT OPTIONS COMPARISON
 ==============================
 
-Render (RECOMMENDED):
-- Cost: Free (750 hours/month)
-- Setup: 5 minutes
+Netlify (CURRENT & RECOMMENDED):
+- Cost: Free (100GB bandwidth/month)
+- Setup: 3 minutes
 - Performance: Excellent
+- Status: ✅ Already deployed & live!
 - SSL: Automatic HTTPS
 - Uptime: 99.9%
-- Best for: This application
-- Recommendation: Use this
+- Auto-deploy: On GitHub push
+- URL: https://bontez-suppliers.netlify.app
 
-Netlify:
-- Cost: Free (100 hours/month functions)
-- Setup: 3 minutes
-- Performance: Very good
-- SSL: Automatic HTTPS
+Alternative Options (for reference):
 - Best for: Static sites
 - Recommendation: Alternative
 
@@ -434,9 +427,9 @@ NEXT STEPS
 ==========
 
 1. Choose Deployment Method
-   - Render (recommended)
-   - Netlify (fast)
-   - Local (development)
+   - Netlify (current & live)
+   - Local development (testing)
+   - Self-hosted (advanced)
 
 2. Deploy the App
    - Follow QUICK_DEPLOY.md
@@ -473,9 +466,9 @@ Documentation:
 - IMPLEMENTATION_SUMMARY.md - Complete guide
 
 Deployment Platforms:
-- Render: https://render.com/docs/
-- Netlify: https://docs.netlify.com/
-- GitHub Pages: https://pages.github.com/
+- Netlify (Current): https://docs.netlify.com/
+- Vercel (Alternative): https://vercel.com/docs
+- GitHub Pages (Static): https://pages.github.com/
 
 Flask Resources:
 - Flask Docs: https://flask.palletsprojects.com/
@@ -495,10 +488,10 @@ GETTING HELP
 ============
 
 For Deployment Issues:
-1. Check DEPLOYMENT.md
-2. Review Render/Netlify dashboard
-3. Check application logs
-4. See troubleshooting section
+1. Check NETLIFY_DEPLOYMENT.md
+2. Review Netlify dashboard logs
+3. Check browser console for errors
+4. See troubleshooting section in docs
 
 For Feature Questions:
 1. See QUICK_START.md
@@ -552,11 +545,11 @@ Features:
 □ All calculations correct
 
 Deployment:
-□ Code committed to GitHub
-□ Render account created
-□ App deployed
-□ Live URL working
-□ Database seeded
+✓ Code committed to GitHub
+✓ Netlify account connected
+✓ App deployed & live
+✓ Live URL working: https://bontez-suppliers.netlify.app
+✓ Sample data loaded (localStorage)
 
 Testing:
 □ Tested all pages
