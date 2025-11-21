@@ -15,6 +15,7 @@ import {
   ChevronRight,
   ChevronLeft,
   MessageSquare,
+  Contact,
 } from 'lucide-react';
 import QRCode from 'react-qr-code';
 import toast from 'react-hot-toast';
@@ -24,6 +25,7 @@ import Card from '../common/Card';
 import { suppliersApi } from '../../services/api';
 import { generateSupplierQRData, generateWhatsAppQR, validateKenyanPhone, formatKenyanPhone } from '../../utils/qrGenerator';
 import { t } from '../../i18n/swahili';
+import { useContactPicker } from '../../hooks/useContactPicker';
 
 const supplierSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -51,8 +53,10 @@ const KENYAN_GAS_BRANDS = [
   { name: 'OiLibya Gas', color: '#92400e' },
   { name: 'Men Gas', color: '#881337' },
   { name: 'Hashi Gas', color: '#eab308' },
-  { name: 'Hass Gas', color: '#2563eb' },
-  { name: 'Mixed Gas', color: '#9333ea' },
+  { name: 'Hass Gas', color: '#9333ea' },
+  { name: 'Pro Gas', color: '#2563eb' },
+  { name: 'Lake Gas', color: '#06b6d4' },
+  { name: 'Hass Petroleum', color: '#7c3aed' },
   { name: 'Custom', color: '#6b7280' },
 ];
 
@@ -65,6 +69,7 @@ const STEPS = [
 export default function SupplierOnboarding({ isOpen, onClose, editingSupplier }: SupplierOnboardingProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const queryClient = useQueryClient();
+  const { isSupported: isContactPickerSupported, isLoading: isPickingContact, pickContact } = useContactPicker();
 
   const { control, handleSubmit, watch, setValue, formState: { errors } } = useForm<SupplierFormData>({
     resolver: zodResolver(supplierSchema),
@@ -143,6 +148,18 @@ export default function SupplierOnboarding({ isOpen, onClose, editingSupplier }:
 
   const handlePrevious = () => {
     if (currentStep > 1) setCurrentStep(currentStep - 1);
+  };
+
+  const handleImportContact = async () => {
+    const contact = await pickContact();
+    if (contact) {
+      if (contact.name) setValue('name', contact.name);
+      if (contact.phone) {
+        setValue('phone', contact.phone);
+        setValue('whatsapp', contact.phone); // Pre-fill WhatsApp with same number
+      }
+      if (contact.email) setValue('email', contact.email);
+    }
   };
 
   const qrData = generateSupplierQRData({
@@ -250,7 +267,7 @@ export default function SupplierOnboarding({ isOpen, onClose, editingSupplier }:
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Select Gas Brand (Swahili: <span className="text-primary-600">Chagua Chapa ya Gesi</span>)
                     </label>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                       {KENYAN_GAS_BRANDS.map((brand) => (
                         <button
                           key={brand.name}
@@ -326,6 +343,33 @@ export default function SupplierOnboarding({ isOpen, onClose, editingSupplier }:
                   exit={{ x: -20, opacity: 0 }}
                   className="space-y-4"
                 >
+                  {/* Contact Picker Banner */}
+                  {isContactPickerSupported && (
+                    <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <h3 className="text-sm font-semibold text-blue-900 dark:text-blue-100 mb-1">
+                            Quick Import from Contacts
+                          </h3>
+                          <p className="text-xs text-blue-700 dark:text-blue-300">
+                            Import supplier contact info from your phone's contacts
+                          </p>
+                        </div>
+                        <Button
+                          type="button"
+                          onClick={handleImportContact}
+                          isLoading={isPickingContact}
+                          variant="primary"
+                          size="sm"
+                          icon={<Contact className="h-4 w-4" />}
+                          className="ml-4 shrink-0"
+                        >
+                          Import
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+
                   <Controller
                     name="phone"
                     control={control}

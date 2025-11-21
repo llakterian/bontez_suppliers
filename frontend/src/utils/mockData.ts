@@ -215,7 +215,10 @@ export const KENYAN_GAS_BRANDS = [
   { name: 'Total Gas', color: '#ea580c', phone: '0734567890' },
   { name: 'Rubis Gas', color: '#16a34a', phone: '0745678901' },
   { name: 'OiLibya Gas', color: '#92400e', phone: '0756789012' },
+  { name: 'Men Gas', color: '#881337', phone: '0756789013' },
   { name: 'Hashi Gas', color: '#eab308', phone: '0767890123' },
-  { name: 'Pro Gas', color: '#2563eb', phone: '0778901234' },
   { name: 'Hass Gas', color: '#9333ea', phone: '0789012345' },
+  { name: 'Pro Gas', color: '#2563eb', phone: '0778901234' },
+  { name: 'Lake Gas', color: '#06b6d4', phone: '0790123456' },
+  { name: 'Hass Petroleum', color: '#7c3aed', phone: '0701234567' },
 ];

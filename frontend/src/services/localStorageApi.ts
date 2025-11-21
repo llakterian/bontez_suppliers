@@ -63,18 +63,60 @@ function initializeSampleData(): void {
       },
     ];
 
-    // Sample suppliers
+    // Sample suppliers - All major Kenyan gas brands
     const sampleSuppliers: Supplier[] = [
       {
         id: 1,
-        name: 'Top Gas Kenya',
+        name: 'Top Gas',
         color: '#dc2626',
         created_at: new Date().toISOString(),
       },
       {
         id: 2,
-        name: 'K-Gas Distributors',
+        name: 'K-Gas',
         color: '#000000',
+        created_at: new Date().toISOString(),
+      },
+      {
+        id: 3,
+        name: 'Total Gas',
+        color: '#ea580c',
+        created_at: new Date().toISOString(),
+      },
+      {
+        id: 4,
+        name: 'Rubis Gas',
+        color: '#16a34a',
+        created_at: new Date().toISOString(),
+      },
+      {
+        id: 5,
+        name: 'OiLibya Gas',
+        color: '#92400e',
+        created_at: new Date().toISOString(),
+      },
+      {
+        id: 6,
+        name: 'Men Gas',
+        color: '#881337',
+        created_at: new Date().toISOString(),
+      },
+      {
+        id: 7,
+        name: 'Hashi Gas',
+        color: '#eab308',
+        created_at: new Date().toISOString(),
+      },
+      {
+        id: 8,
+        name: 'Hass Gas',
+        color: '#9333ea',
+        created_at: new Date().toISOString(),
+      },
+      {
+        id: 9,
+        name: 'Pro Gas',
+        color: '#2563eb',
         created_at: new Date().toISOString(),
       },
     ];
