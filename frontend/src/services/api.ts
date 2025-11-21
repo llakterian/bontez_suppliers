@@ -53,7 +53,7 @@ console.log(`API Mode: ${USE_LOCAL_STORAGE ? 'LocalStorage (Netlify)' : 'Backend
 console.log(`Environment: ${import.meta.env.MODE}`);
 
 // Dashboard API
-export const dashboardApi = {
+export const dashboardApi = USE_LOCAL_STORAGE ? localStorageApi.dashboard : {
   getStats: (): Promise<DashboardData> =>
     api.get('/dashboard').then(res => res.data),
 };

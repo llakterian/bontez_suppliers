@@ -160,7 +160,7 @@ export default function ReportsEnhanced() {
       });
 
       // Sales by Supplier
-      if (Object.keys(reportData.sales_by_supplier).length > 0) {
+      if (reportData.sales_by_supplier && Object.keys(reportData.sales_by_supplier).length > 0) {
         const supplierY = (doc as any).lastAutoTable.finalY + 10;
         doc.setFontSize(14);
         doc.text('Sales by Supplier', 14, supplierY);
@@ -180,7 +180,7 @@ export default function ReportsEnhanced() {
       }
 
       // Payment Methods
-      if (Object.keys(reportData.sales_by_payment_method).length > 0) {
+      if (reportData.sales_by_payment_method && Object.keys(reportData.sales_by_payment_method).length > 0) {
         const paymentY = (doc as any).lastAutoTable.finalY + 10;
         doc.setFontSize(14);
         doc.text('Payment Methods', 14, paymentY);
@@ -242,20 +242,24 @@ export default function ReportsEnhanced() {
       csvContent += `YoY Growth,${reportData.yoy_growth || 'N/A'}%\n\n`;
       
       // Sales by Supplier
-      csvContent += 'SALES BY SUPPLIER\n';
-      csvContent += 'Supplier,Revenue\n';
-      Object.entries(reportData.sales_by_supplier).forEach(([name, amount]) => {
-        csvContent += `${name},${amount}\n`;
-      });
-      csvContent += '\n';
+      if (reportData.sales_by_supplier) {
+        csvContent += 'SALES BY SUPPLIER\n';
+        csvContent += 'Supplier,Revenue\n';
+        Object.entries(reportData.sales_by_supplier).forEach(([name, amount]) => {
+          csvContent += `${name},${amount}\n`;
+        });
+        csvContent += '\n';
+      }
       
       // Payment Methods
-      csvContent += 'PAYMENT METHODS\n';
-      csvContent += 'Method,Amount\n';
-      Object.entries(reportData.sales_by_payment_method).forEach(([method, amount]) => {
-        csvContent += `${method},${amount}\n`;
-      });
-      csvContent += '\n';
+      if (reportData.sales_by_payment_method) {
+        csvContent += 'PAYMENT METHODS\n';
+        csvContent += 'Method,Amount\n';
+        Object.entries(reportData.sales_by_payment_method).forEach(([method, amount]) => {
+          csvContent += `${method},${amount}\n`;
+        });
+        csvContent += '\n';
+      }
       
       // Product Types
       if (reportData.sales_by_product_type) {
@@ -278,7 +282,7 @@ export default function ReportsEnhanced() {
   };
 
   // Chart configurations
-  const supplierChartData = reportData ? {
+  const supplierChartData = reportData?.sales_by_supplier && Object.keys(reportData.sales_by_supplier).length > 0 ? {
     labels: Object.keys(reportData.sales_by_supplier),
     datasets: [
       {
@@ -307,7 +311,7 @@ export default function ReportsEnhanced() {
     ],
   } : null;
 
-  const paymentMethodChartData = reportData ? {
+  const paymentMethodChartData = reportData?.sales_by_payment_method && Object.keys(reportData.sales_by_payment_method).length > 0 ? {
     labels: Object.keys(reportData.sales_by_payment_method).map((m) => m.toUpperCase()),
     datasets: [
       {

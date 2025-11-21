@@ -89,10 +89,41 @@ function initializeSampleData(): void {
       { id: 6, name: 'Gas Regulator', price: 500, supplier_id: 2, category: 'accessory', created_at: new Date().toISOString() },
     ];
 
+    // Sample sales - generate sales for the past 30 days
+    const sampleSales: Sale[] = [];
+    const now = new Date();
+    for (let i = 0; i < 30; i++) {
+      const saleDate = new Date(now);
+      saleDate.setDate(saleDate.getDate() - i);
+      
+      // 2-4 sales per day
+      const salesPerDay = Math.floor(Math.random() * 3) + 2;
+      for (let j = 0; j < salesPerDay; j++) {
+        const clientId = Math.floor(Math.random() * 2) + 1;
+        const supplierId = Math.floor(Math.random() * 2) + 1;
+        const paymentMethods: Array<'cash' | 'mpesa' | 'installment'> = ['cash', 'mpesa', 'installment'];
+        const paymentMethod = paymentMethods[Math.floor(Math.random() * paymentMethods.length)];
+        const totalAmount = Math.floor(Math.random() * 5000) + 1000;
+        
+        sampleSales.push({
+          id: sampleSales.length + 1,
+          client_id: clientId,
+          supplier_id: supplierId,
+          payment_method: paymentMethod,
+          mpesa_code: paymentMethod === 'mpesa' ? `MPE${Math.random().toString(36).substring(7).toUpperCase()}` : undefined,
+          total_amount: totalAmount,
+          amount_paid: paymentMethod === 'installment' ? Math.floor(totalAmount * 0.5) : totalAmount,
+          notes: 'Sample sale',
+          created_at: saleDate.toISOString(),
+          sale_date: saleDate.toISOString(),
+        });
+      }
+    }
+
     setStorageData(STORAGE_KEYS.CLIENTS, sampleClients);
     setStorageData(STORAGE_KEYS.SUPPLIERS, sampleSuppliers);
     setStorageData(STORAGE_KEYS.PRODUCTS, sampleProducts);
-    setStorageData(STORAGE_KEYS.SALES, []);
+    setStorageData(STORAGE_KEYS.SALES, sampleSales);
     setStorageData(STORAGE_KEYS.ACCESSORIES, []);
     
     localStorage.setItem(STORAGE_KEYS.INITIALIZED, 'true');
@@ -317,6 +348,8 @@ export const localReportsApi = {
   getSalesReport: async (filters: any): Promise<any> => {
     await delay();
     const sales = getStorageData<Sale>(STORAGE_KEYS.SALES);
+    const clients = getStorageData<Client>(STORAGE_KEYS.CLIENTS);
+    const suppliers = getStorageData<Supplier>(STORAGE_KEYS.SUPPLIERS);
     
     // Filter sales by date range if provided
     let filteredSales = sales;
@@ -330,38 +363,123 @@ export const localReportsApi = {
         new Date(s.created_at) <= new Date(filters.date_to)
       );
     }
+    if (filters.supplier_id) {
+      filteredSales = filteredSales.filter(s => s.supplier_id === filters.supplier_id);
+    }
     
     // Calculate totals
-    const totalSales = filteredSales.reduce((sum, s) => sum + (s.total_amount || 0), 0);
-    const totalCash = filteredSales
-      .filter(s => s.payment_method === 'cash')
-      .reduce((sum, s) => sum + (s.total_amount || 0), 0);
-    const totalMpesa = filteredSales
-      .filter(s => s.payment_method === 'mpesa')
-      .reduce((sum, s) => sum + (s.total_amount || 0), 0);
-    const totalInstallments = filteredSales
-      .filter(s => s.payment_method === 'installment')
-      .reduce((sum, s) => sum + (s.total_amount || 0), 0);
+    const totalRevenue = filteredSales.reduce((sum, s) => sum + (s.total_amount || 0), 0);
+    const totalSalesCount = filteredSales.length;
+    const averageSale = totalSalesCount > 0 ? totalRevenue / totalSalesCount : 0;
+    
+    // Sales by payment method
+    const salesByPaymentMethod: { [key: string]: number } = {
+      cash: 0,
+      mpesa: 0,
+      installment: 0,
+    };
+    filteredSales.forEach(s => {
+      const method = s.payment_method || 'cash';
+      salesByPaymentMethod[method] = (salesByPaymentMethod[method] || 0) + (s.total_amount || 0);
+    });
+    
+    // Sales by supplier
+    const salesBySupplier: { [key: string]: number } = {};
+    filteredSales.forEach(s => {
+      if (s.supplier_id) {
+        const supplier = suppliers.find(sup => sup.id === s.supplier_id);
+        const supplierName = supplier?.name || `Supplier ${s.supplier_id}`;
+        salesBySupplier[supplierName] = (salesBySupplier[supplierName] || 0) + (s.total_amount || 0);
+      }
+    });
+    
+    // Sales by product type (mock data for now since we don't have item details in localStorage)
+    const salesByProductType: { [key: string]: number } = {};
+    
+    // Daily sales - group by date
+    const dailySalesMap: { [date: string]: { amount: number; count: number } } = {};
+    filteredSales.forEach(s => {
+      const date = new Date(s.created_at).toISOString().split('T')[0];
+      if (!dailySalesMap[date]) {
+        dailySalesMap[date] = { amount: 0, count: 0 };
+      }
+      dailySalesMap[date].amount += s.total_amount || 0;
+      dailySalesMap[date].count += 1;
+    });
+    
+    const dailySales = Object.entries(dailySalesMap)
+      .map(([date, data]) => ({ date, amount: data.amount, count: data.count }))
+      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    
+    // Top clients
+    const clientTotals: { [clientId: number]: number } = {};
+    filteredSales.forEach(s => {
+      clientTotals[s.client_id] = (clientTotals[s.client_id] || 0) + (s.total_amount || 0);
+    });
+    
+    const topClients = Object.entries(clientTotals)
+      .map(([clientId, total]) => {
+        const client = clients.find(c => c.id === parseInt(clientId));
+        return {
+          name: client?.name || `Client ${clientId}`,
+          total,
+        };
+      })
+      .sort((a, b) => b.total - a.total)
+      .slice(0, 10);
     
     return {
-      total_sales: totalSales,
-      total_transactions: filteredSales.length,
-      payment_methods: {
-        cash: totalCash,
-        mpesa: totalMpesa,
-        installment: totalInstallments,
-      },
-      sales: filteredSales,
-      period: {
-        from: filters.date_from || 'All time',
-        to: filters.date_to || 'Now',
-      },
+      total_sales: totalSalesCount,
+      total_revenue: totalRevenue,
+      average_sale: averageSale,
+      yoy_growth: undefined,
+      sales_by_supplier: salesBySupplier,
+      sales_by_payment_method: salesByPaymentMethod,
+      sales_by_product_type: salesByProductType,
+      daily_sales: dailySales,
+      top_clients: topClients,
     };
   },
 
   getCustomReport: async (filters: any): Promise<any> => {
     // Same as getSalesReport for localStorage
     return localReportsApi.getSalesReport(filters);
+  },
+};
+
+// Dashboard API
+export const localDashboardApi = {
+  getStats: async (): Promise<any> => {
+    await delay();
+    const sales = getStorageData<Sale>(STORAGE_KEYS.SALES);
+    const clients = getStorageData<Client>(STORAGE_KEYS.CLIENTS);
+    
+    // Calculate stats
+    const totalSales = sales.reduce((sum, s) => sum + (s.total_amount || 0), 0);
+    const totalPaid = sales.reduce((sum, s) => sum + (s.amount_paid || 0), 0);
+    const pendingBalance = totalSales - totalPaid;
+    
+    // Get recent sales (last 10)
+    const recentSales = sales
+      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+      .slice(0, 10)
+      .map(sale => {
+        const client = clients.find(c => c.id === sale.client_id);
+        return {
+          ...sale,
+          client: client || { id: sale.client_id, name: `Client ${sale.client_id}`, phone: '', created_at: '' },
+        };
+      });
+    
+    return {
+      stats: {
+        total_sales: totalSales,
+        total_clients: clients.length,
+        total_paid: totalPaid,
+        pending_balance: pendingBalance,
+      },
+      recent_sales: recentSales,
+    };
   },
 };
 
@@ -372,6 +490,7 @@ export const localStorageApi = {
   sales: localSalesApi,
   products: localProductsApi,
   reports: localReportsApi,
+  dashboard: localDashboardApi,
 };
 
 // Clear all data (for testing/reset)
